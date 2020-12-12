@@ -24,6 +24,39 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Type-Reader</title>
+    <style>
+
+  #cmd1 {
+    font-family: courier;
+    font-size: 14px;
+    background: black;
+    color: #21f838;
+    padding: 12px;
+    overflow: hidden;
+    height: 40px;
+      
+  }
+  
+  #span1 {
+    float: left; 
+    padding-left: 3px;
+    white-space: pre;
+  }
+  
+  #cursor1 {
+    float: left;
+    width: 8px;
+    height: 14px;
+    background: #21f838;
+  }
+    
+  #input1 {
+    width: 0;
+    height: 0;
+    opacity: 0; 
+  }
+  
+</style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -38,5 +71,36 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script>  $(function() {
+  var cursor;
+  $('#cmd1').click(function() {
+    $('#input1').focus();
+    cursor = window.setInterval(function() {
+      if ($('#cursor1').css('visibility') === 'visible') {
+        $('#cursor1').css({
+          visibility: 'hidden'
+        });
+      } else {
+        $('#cursor1').css({
+          visibility: 'visible'
+        });
+      }
+    }, 500);
+
+  });
+
+  $('#input1').keyup(function() {
+    $('#span1').text($(this).val());
+  });
+
+  $('#input1').blur(function() {
+    clearInterval(cursor);
+    $('#cursor1').css({
+      visibility: 'visible'
+    });
+  });
+});
+</script>
   </body>
 </html>
