@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './Login.style.scss';
 
 const Login = () => {
@@ -15,10 +15,16 @@ const Login = () => {
       </p>
       <form className='form'>
         <div id='cmd1'>
-          <span id='span1'>{'User: '}</span>
+          <div id='span'>{'User >  '}</div>
+          <span id='span1'></span>
           <div id='cursor1'></div>
         </div>
-        <input id='input1' type='text' />
+        <div id='cmd2'>
+          <div id='span'>{'Password >  '}</div>
+          <span id='span2'></span>
+          <div id='cursor2'></div>
+        </div>
+        <input id='input2' type='text' />
         <div className='button'>
           <button className='login'>login</button>
           <button className='create'>create</button>

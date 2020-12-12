@@ -26,7 +26,7 @@
     <title>Type-Reader</title>
     <style>
 
-  #cmd1 {
+  #cmd1, #cmd2 {
     font-family: courier;
     font-size: 14px;
     background: black;
@@ -34,23 +34,31 @@
     padding: 12px;
     overflow: hidden;
     height: 40px;
-      
+  }
+
+  #cmd1 {
+    margin-bottom: 10px;
+  }
+
+  #span {
+    display: inline-block;
   }
   
-  #span1 {
-    float: left; 
-    padding-left: 3px;
+  #span1, #span2 {
+    padding-left: 10px;
+    display: inline-block;
     white-space: pre;
+    color: #fff;
   }
   
-  #cursor1 {
-    float: left;
-    width: 8px;
-    height: 14px;
+  #cursor1, #cursor2 {
+    display: inline-block;
+    width: 7px;
+    height: 12px;
     background: #21f838;
   }
     
-  #input1 {
+  #input1, #input2 {
     width: 0;
     height: 0;
     opacity: 0; 
@@ -72,7 +80,10 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script>  $(function() {
+  <script> 
+
+
+$(function() {
   var cursor;
   $('#cmd1').click(function() {
     $('#input1').focus();
@@ -101,6 +112,11 @@
     });
   });
 });
+
+
+//$(document).ready(function(){
+//  $('#cmd1').trigger('click');
+//});
 </script>
   </body>
 </html>
