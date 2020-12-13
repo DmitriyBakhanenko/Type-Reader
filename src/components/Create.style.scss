@@ -91,7 +91,27 @@
       }
     }
 
+  
+    .cmd3 {
+      @extend .cmd1;
+      
+      .span3 {
+        @extend .span1;
+      }
+
+      .cursor3 {
+        @extend .cursor1;
+      }
+
+      .input3 {
+        @extend .input1;
+      }
+    }
+
     .cmd1 {
+      margin-bottom: 10px;
+    }
+    .cmd2 {
       margin-bottom: 10px;
     }
 
@@ -101,11 +121,8 @@
       
 
       button {
-        &:first-child {
-          margin-right: 4%;
-        }
-        width: 48%; 
         height: 35px;
+        width: 100%;
         color: #ffffff;
         text-transform: uppercase;
         border: none;
@@ -113,10 +130,6 @@
         background-color: #393939;
         font-weight: 700;
         letter-spacing: 1px;
-        border-style: groove;
-        border-color: black;
-        border-bottom: none;
-        border-right: none;
 
         &:hover {
           background-color: #494949;

@@ -5,31 +5,31 @@ import './Login.style.scss';
 const Login = () => {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
-  const [hidden, setHidden] = useState(true);
-  const [hidden2, setHidden2] = useState(true);
+  const [hiddenUsr, setHiddenUsr] = useState(true);
+  const [hiddenPwd, setHiddenPwd] = useState(true);
   const [shifr, setShifr] = useState('');
 
   const cursorEvent: any = useRef();
-  const refCmd: any = useRef();
-  const refCmd2: any = useRef();
-  const refInput1: any = useRef();
-  const refInput2: any = useRef();
+  const refUsrContainer: any = useRef();
+  const refPwdContainer: any = useRef();
+  const refUsrInput: any = useRef();
+  const refPwdInput: any = useRef();
 
   // *** focuses first input on component did mount
   useEffect(() => {
-    refInput1.current?.focus();
+    refUsrInput.current?.focus();
   }, []);
 
   // *** sets focus and blinking on input click event
   const handleClick = (e: any) => {
-    if (e.target === refCmd.current) {
-      refInput1.current?.focus();
-      setHidden(!hidden);
-      setHidden2(true);
+    if (e.target === refUsrContainer.current) {
+      refUsrInput.current?.focus();
+      setHiddenUsr(!hiddenUsr);
+      setHiddenPwd(true);
     } else {
-      refInput2.current?.focus();
-      setHidden2(!hidden2);
-      setHidden(true);
+      refPwdInput.current?.focus();
+      setHiddenPwd(!hiddenPwd);
+      setHiddenUsr(true);
     }
   };
 
@@ -40,8 +40,8 @@ const Login = () => {
 
   // *** sets blinking cursor to the first input
   useEffect(() => {
-    if (document.activeElement === ReactDOM.findDOMNode(refInput1.current))
-      cursorEvent.current = setInterval(() => setHidden(!hidden), 500);
+    if (document.activeElement === ReactDOM.findDOMNode(refUsrInput.current))
+      cursorEvent.current = setInterval(() => setHiddenUsr(!hiddenUsr), 500);
     return () => {
       clearInterval(cursorEvent.current);
     };
@@ -49,8 +49,8 @@ const Login = () => {
 
   // *** sets blinking cursor to the second input
   useEffect(() => {
-    if (document.activeElement === ReactDOM.findDOMNode(refInput2.current))
-      cursorEvent.current = setInterval(() => setHidden2(!hidden2), 500);
+    if (document.activeElement === ReactDOM.findDOMNode(refPwdInput.current))
+      cursorEvent.current = setInterval(() => setHiddenPwd(!hiddenPwd), 500);
     return () => {
       clearInterval(cursorEvent.current);
     };
@@ -62,47 +62,57 @@ const Login = () => {
         <span className='sign'>{'_> '}</span>Welcome.
       </h1>
       <p className='info'>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus
-        dolores quis, officia in suscipit placeat dolor doloribus ipsam,
-        recusandae reiciendis sed amet consequuntur consequatur voluptates velit
+        This application was designed to teach you the touch typing while you
+        enjoy reading your favorite book. The project is non-commercial and open
+        source. For the further information please visit my github account.
+        Application stores your user credentials just for the better experience,
+        keeps your privacy and does not share with other 3rd parties.
       </p>
       <form className='form'>
-        <div ref={refCmd} onClick={(e) => handleClick(e)} id='cmd1'>
-          <div id='span'>{'User >  '}</div>
-          <span id='span1'>{user}</span>
+        <div
+          ref={refUsrContainer}
+          onClick={(e) => handleClick(e)}
+          className='cmd1'
+        >
+          <div className='span'>{'User >  '}</div>
+          <span className='span1'>{user}</span>
           <div
-            id='cursor1'
+            className='cursor1'
             style={
-              hidden ? { visibility: 'hidden' } : { visibility: 'visible' }
+              hiddenUsr ? { visibility: 'hidden' } : { visibility: 'visible' }
             }
           ></div>
           <input
             required
             autoComplete='off'
             minLength={4}
-            ref={refInput1}
-            id='input1'
+            ref={refUsrInput}
+            className='input1'
             type='text'
             onChange={(e) => setUser(e.target.value)}
             value={user}
           />
         </div>
-        <div ref={refCmd2} onClick={(e) => handleClick(e)} id='cmd2'>
-          <div id='span'>{'Password >  '}</div>
-          <span id='span2'>{shifr}</span>
+        <div
+          ref={refPwdContainer}
+          onClick={(e) => handleClick(e)}
+          className='cmd2'
+        >
+          <div className='span'>{'Password >  '}</div>
+          <span className='span2'>{shifr}</span>
           <div
             style={
-              hidden2 ? { visibility: 'hidden' } : { visibility: 'visible' }
+              hiddenPwd ? { visibility: 'hidden' } : { visibility: 'visible' }
             }
-            id='cursor2'
+            className='cursor2'
           ></div>
           <input
             required
             autoComplete='off'
-            ref={refInput2}
+            ref={refPwdInput}
             minLength={8}
             type='text'
-            id='input2'
+            className='input2'
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
