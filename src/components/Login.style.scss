@@ -5,6 +5,9 @@
   width: 40%;
   display: flex;
   flex-direction: column;
+  border-style: groove;
+  border-color: black;
+  box-shadow: 30px 40px 58px black;
 
   .header {
     margin: 20px 40px;
@@ -34,13 +37,16 @@
     justify-self: stretch;
 
     #cmd1 {
-      font-family: courier;
-      font-size: 14px;
+      font-size: 16px;
       background: black;
       color: #21f838;
       padding: 12px;
       overflow: hidden;
       height: 40px;
+
+      &:hover {
+        cursor: pointer;
+      }
 
       #span {
         display: inline-block;
@@ -56,8 +62,9 @@
       #cursor1 {
         display: inline-block;
         width: 7px;
-        height: 12px;
+        height: 14px;
         background: #21f838;
+        margin-left: 1px;
       }
         
       #input1 {
@@ -104,6 +111,12 @@
         border: none;
         font-size: 1rem;
         background-color: #393939;
+        font-weight: 700;
+        letter-spacing: 1px;
+        border-style: groove;
+        border-color: black;
+        border-bottom: none;
+        border-right: none;
 
         &:hover {
           background-color: #494949;
