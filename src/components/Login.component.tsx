@@ -78,6 +78,7 @@ const Login = () => {
           ></div>
           <input
             required
+            autoComplete='off'
             minLength={4}
             ref={refInput1}
             id='input1'
@@ -97,6 +98,7 @@ const Login = () => {
           ></div>
           <input
             required
+            autoComplete='off'
             ref={refInput2}
             minLength={8}
             type='text'
