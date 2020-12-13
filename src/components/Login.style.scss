@@ -33,24 +33,60 @@
     flex-direction: column;
     justify-self: stretch;
 
-    input {
-      &:first-child {
-        margin-bottom: 10px;
-      }
-    
-    //margin: 5px 0;
-    //height: 35px;
-    //background-color: #494949;
-    //font-size: 1rem;
-    //font-weight: 700;
-    //text-indent: 15px;
-    //border: none;
-    //color: #20C20E;
+    #cmd1 {
+      font-family: courier;
+      font-size: 14px;
+      background: black;
+      color: #21f838;
+      padding: 12px;
+      overflow: hidden;
+      height: 40px;
 
-    //&::placeholder {
-      //color: #898989;
-    //}
-  }
+      #span {
+        display: inline-block;
+      }
+      
+      #span1 {
+        padding-left: 10px;
+        display: inline-block;
+        white-space: pre;
+        color: #fff;
+      }
+      
+      #cursor1 {
+        display: inline-block;
+        width: 7px;
+        height: 12px;
+        background: #21f838;
+      }
+        
+      #input1 {
+        width: 0;
+        height: 0;
+        opacity: 0; 
+      }
+
+    }
+    
+    #cmd2 {
+      @extend #cmd1;
+      
+      #span2 {
+        @extend #span1;
+      }
+
+      #cursor2 {
+        @extend #cursor1;
+      }
+
+      #input2 {
+        @extend #input1;
+      }
+    }
+
+    #cmd1 {
+      margin-bottom: 10px;
+    }
 
     .button, .button2 {
       display: inline-block;
