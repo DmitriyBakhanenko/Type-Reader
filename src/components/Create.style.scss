@@ -1,25 +1,27 @@
+@import '../colors';
+
 .login.container {
   margin: auto;
-  background-color: #212121;
+  background-color: $background-color;
   height: auto;
   width: 40%;
   display: flex;
   flex-direction: column;
   border-style: groove;
-  border-color: black;
-  box-shadow: 30px 40px 58px black;
+  border-color: darken($background-color, $amount: 10);
+  box-shadow: 30px 40px 58px darken($background-color, $amount: 10);
 
   .header {
     margin: 20px 40px;
-    background-color: #131313;
+    background-color: $background-main;
     text-align: center;
     .sign {
-      color: #20C20E;
+      color: $green-color;
     }
   }
 
   .info {
-    color: #ffffff;
+    color: $text-color;
     opacity: 0.6;
     margin: 0 40px;
     line-height: 20px;
@@ -38,8 +40,8 @@
 
     .cmd1 {
       font-size: 16px;
-      background: black;
-      color: #21f838;
+      background: $background-main;
+      color: $green-color;
       padding: 12px;
       overflow: hidden;
       height: 40px;
@@ -56,14 +58,14 @@
         padding-left: 10px;
         display: inline-block;
         white-space: pre;
-        color: #fff;
+        color: $text-color;
       }
       
       .cursor1 {
         display: inline-block;
         width: 7px;
         height: 14px;
-        background: #21f838;
+        background: $green-color;
         margin-left: 1px;
       }
         
@@ -123,18 +125,18 @@
       button {
         height: 35px;
         width: 100%;
-        color: #ffffff;
+        color: $text-color;
         text-transform: uppercase;
         border: none;
         font-size: 1rem;
-        background-color: #393939;
+        background-color: $button-color;
         font-weight: 700;
         letter-spacing: 1px;
 
         &:hover {
-          background-color: #494949;
+          background-color: lighten($button-color, $amount: 10);
           cursor: pointer;
-          color: #20C20E;
+          color: $green-color;
         }
       }
     }
