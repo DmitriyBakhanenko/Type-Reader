@@ -22,6 +22,9 @@ const Login = () => {
 
   // *** sets focus and blinking on input click event
   const handleClick = (e: any) => {
+    console.log(refUsrContainer.current);
+    console.log(e.target);
+    console.log(refPwdInput.current);
     if (e.target === refUsrContainer.current) {
       refUsrInput.current?.focus();
       setHiddenUsr(!hiddenUsr);
@@ -42,6 +45,7 @@ const Login = () => {
   useEffect(() => {
     if (document.activeElement === ReactDOM.findDOMNode(refUsrInput.current))
       cursorEvent.current = setInterval(() => setHiddenUsr(!hiddenUsr), 500);
+    else clearInterval(cursorEvent.current);
     return () => {
       clearInterval(cursorEvent.current);
     };
@@ -51,44 +55,51 @@ const Login = () => {
   useEffect(() => {
     if (document.activeElement === ReactDOM.findDOMNode(refPwdInput.current))
       cursorEvent.current = setInterval(() => setHiddenPwd(!hiddenPwd), 500);
+    else clearInterval(cursorEvent.current);
     return () => {
       clearInterval(cursorEvent.current);
     };
   });
 
   return (
-    <div className='login container'>
-      <h1 className='header'>
-        <span className='sign'>{'_> '}</span>Welcome.
+    <div className="login container">
+      <h1 className="header">
+        <span className="sign">{'_> '}</span>Welcome.
       </h1>
-      <p className='info'>
+      <p className="info">
         This application was designed to teach you the touch typing while you
         enjoy reading your favorite book. The project is non-commercial and open
-        source. For the further information please visit my github account.
-        Application stores your user credentials just for the better experience,
-        keeps your privacy and does not share with other 3rd parties.
+        source. For the further information please visit my github{' '}
+        <a
+          className="source-link"
+          href="https://github.com/devCote/Type-Reader"
+        >
+          source code
+        </a>{' '}
+        . Application keeps your privacy and does not share with other 3rd
+        parties. Enjoy your time!
       </p>
-      <form className='form'>
+      <form className="form">
         <div
           ref={refUsrContainer}
           onClick={(e) => handleClick(e)}
-          className='cmd1'
+          className="cmd1"
         >
-          <div className='span'>{'User >  '}</div>
-          <span className='span1'>{user}</span>
+          <div className="span">{'User >  '}</div>
+          <span className="span1">{user}</span>
           <div
-            className='cursor1'
+            className="cursor1"
             style={
               hiddenUsr ? { visibility: 'hidden' } : { visibility: 'visible' }
             }
           ></div>
           <input
             required
-            autoComplete='off'
+            autoComplete="off"
             minLength={4}
             ref={refUsrInput}
-            className='input1'
-            type='text'
+            className="input1"
+            type="text"
             onChange={(e) => setUser(e.target.value)}
             value={user}
           />
@@ -96,34 +107,34 @@ const Login = () => {
         <div
           ref={refPwdContainer}
           onClick={(e) => handleClick(e)}
-          className='cmd2'
+          className="cmd2"
         >
-          <div className='span'>{'Password >  '}</div>
-          <span className='span2'>{shifr}</span>
+          <div className="span">{'Password >  '}</div>
+          <span className="span2">{shifr}</span>
           <div
             style={
               hiddenPwd ? { visibility: 'hidden' } : { visibility: 'visible' }
             }
-            className='cursor2'
+            className="cursor2"
           ></div>
           <input
             required
-            autoComplete='off'
+            autoComplete="off"
             ref={refPwdInput}
             minLength={8}
-            type='text'
-            className='input2'
+            type="text"
+            className="input2"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
         </div>
-        <div className='button'>
-          <button className='login'>login</button>
-          <button className='create'>create</button>
+        <div className="button">
+          <button className="login">login</button>
+          <button className="create">new user</button>
         </div>
-        <div className='button2'>
-          <button className='google'>google</button>
-          <button className='facebook'>facebook</button>
+        <div className="button2">
+          <button className="google">google</button>
+          <button className="facebook">facebook</button>
         </div>
       </form>
     </div>
