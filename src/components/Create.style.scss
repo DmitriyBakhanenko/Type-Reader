@@ -1,0 +1,144 @@
+@import '../colors';
+
+.login.container {
+  margin: auto;
+  background-color: $background-color;
+  height: auto;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  border-style: groove;
+  border-color: darken($background-color, $amount: 10);
+  box-shadow: 30px 40px 58px darken($background-color, $amount: 10);
+
+  .header {
+    margin: 20px 40px;
+    background-color: $background-main;
+    text-align: center;
+    .sign {
+      color: $green-color;
+    }
+  }
+
+  .info {
+    color: $text-color;
+    opacity: 0.6;
+    margin: 0 40px;
+    line-height: 20px;
+    text-align: justify;
+    margin-bottom: 20px;
+  }
+
+  .form {
+    margin-right: 40px;
+    margin-left: 40px;
+    margin-top: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-self: stretch;
+
+    .cmd1 {
+      font-size: 16px;
+      background: $background-main;
+      color: $green-color;
+      padding: 12px;
+      overflow: hidden;
+      height: 40px;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .span {
+        display: inline-block;
+      }
+      
+      .span1 {
+        padding-left: 10px;
+        display: inline-block;
+        white-space: pre;
+        color: $text-color;
+      }
+      
+      .cursor1 {
+        display: inline-block;
+        width: 7px;
+        height: 14px;
+        background: $green-color;
+        margin-left: 1px;
+      }
+        
+      .input1 {
+        width: 0;
+        height: 0;
+        opacity: 0; 
+      }
+
+    }
+    
+    .cmd2 {
+      @extend .cmd1;
+      
+      .span2 {
+        @extend .span1;
+      }
+
+      .cursor2 {
+        @extend .cursor1;
+      }
+
+      .input2 {
+        @extend .input1;
+      }
+    }
+
+  
+    .cmd3 {
+      @extend .cmd1;
+      
+      .span3 {
+        @extend .span1;
+      }
+
+      .cursor3 {
+        @extend .cursor1;
+      }
+
+      .input3 {
+        @extend .input1;
+      }
+    }
+
+    .cmd1 {
+      margin-bottom: 10px;
+    }
+    .cmd2 {
+      margin-bottom: 10px;
+    }
+
+    .button, .button2 {
+      display: inline-block;
+      margin-top: 10px;
+      
+
+      button {
+        height: 35px;
+        width: 100%;
+        color: $text-color;
+        text-transform: uppercase;
+        border: none;
+        font-size: 1rem;
+        background-color: $button-color;
+        font-weight: 700;
+        letter-spacing: 1px;
+
+        &:hover {
+          background-color: lighten($button-color, $amount: 10);
+          cursor: pointer;
+          color: $green-color;
+        }
+      }
+    }
+  }
+}
