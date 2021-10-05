@@ -22,9 +22,9 @@ const Login = () => {
 
   // *** sets focus and blinking on input click event
   const handleClick = (e: any) => {
-    console.log(refUsrContainer.current);
-    console.log(e.target);
-    console.log(refPwdInput.current);
+    //console.log(refUsrContainer.current);
+    //console.log(e.target);
+    //console.log(refPwdInput.current);
     if (e.target === refUsrContainer.current) {
       refUsrInput.current?.focus();
       setHiddenUsr(!hiddenUsr);
@@ -43,9 +43,9 @@ const Login = () => {
 
   // *** sets blinking cursor to the first input
   useEffect(() => {
-    if (document.activeElement === ReactDOM.findDOMNode(refUsrInput.current))
+    if (document.activeElement === ReactDOM.findDOMNode(refUsrInput.current)) {
       cursorEvent.current = setInterval(() => setHiddenUsr(!hiddenUsr), 500);
-    else clearInterval(cursorEvent.current);
+    }
     return () => {
       clearInterval(cursorEvent.current);
     };
@@ -53,9 +53,9 @@ const Login = () => {
 
   // *** sets blinking cursor to the second input
   useEffect(() => {
-    if (document.activeElement === ReactDOM.findDOMNode(refPwdInput.current))
+    if (document.activeElement === ReactDOM.findDOMNode(refPwdInput.current)) {
       cursorEvent.current = setInterval(() => setHiddenPwd(!hiddenPwd), 500);
-    else clearInterval(cursorEvent.current);
+    }
     return () => {
       clearInterval(cursorEvent.current);
     };
@@ -74,8 +74,8 @@ const Login = () => {
           className="source-link"
           href="https://github.com/devCote/Type-Reader"
         >
-          source code
-        </a>{' '}
+          *source code
+        </a>
         . Application keeps your privacy and does not share with other 3rd
         parties. Enjoy your time!
       </p>
