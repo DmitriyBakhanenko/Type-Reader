@@ -4,7 +4,7 @@
   margin: auto;
   background-color: $background-color;
   height: auto;
-  width: 30%;
+  width: 35%;
   display: flex;
   flex-direction: column;
 
@@ -12,7 +12,7 @@
     width: 40%;
   }
   @media all and (min-width: 700px) and (max-width: 1000px) {
-    width: 60%;
+    width: 50%;
   }
   @media all and (min-width: 400px) and (max-width: 700px) {
     width: 80%;
@@ -118,17 +118,22 @@
       margin-bottom: 10px;
     }
 
-    .button,
-    .button2,
-    .button3 {
+    .button {
       display: inline-block;
       margin: 12px 0 0 0;
 
-      button {
+      .create {
+        color: red;
+        width: 10px;
+      }
+
+      a {
         &:first-child {
           margin-right: 4%;
         }
+      }
 
+      button {
         height: 35px;
         width: 48%;
         color: $text-color;
@@ -143,6 +148,17 @@
           background-color: lighten($button-color, $amount: 10);
           cursor: pointer;
           color: $green-color;
+        }
+      }
+    }
+
+    .button2,
+    .button3 {
+      @extend .button;
+
+      button {
+        &:first-child {
+          margin-right: 4%;
         }
       }
     }

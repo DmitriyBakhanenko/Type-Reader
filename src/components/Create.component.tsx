@@ -1,25 +1,54 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+//import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+//import { signUpStart } from '../redux/user/user.actions';
 import './Create.style.scss';
 
 const Create = () => {
-  const [user, setUser] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [hiddenUsr, setHiddenUsr] = useState(true);
+  const [hiddenEmail, setHiddenEmail] = useState(true);
   const [hiddenPwd, setHiddenPwd] = useState(true);
   const [hiddenPwdConfirm, setHiddenPwdConfirm] = useState(true);
   const [shifrPwd, setShifrPwd] = useState('');
   const [shifrPwdConfirm, setShifrPwdConfirm] = useState('');
-  const [pwdMatch, setPwdMatch] = useState(true);
+
+  const [submitCheck, setSubmitCheck] = useState({
+    pwdMatchSuccess: true,
+    checkName: true,
+    checkEmail: true,
+    checkPwd: true,
+    notValidEmail: true,
+  });
+
+  const {
+    pwdMatchSuccess,
+    checkName,
+    checkPwd,
+    checkEmail,
+    notValidEmail,
+  } = submitCheck;
 
   const cursorEvent: any = useRef();
   const refUsrCont: any = useRef();
+  const refEmailCont: any = useRef();
   const refPwdCont: any = useRef();
   const refPwdConfirmCont: any = useRef();
   const refUsrInpt: any = useRef();
+  const refEmailInpt: any = useRef();
   const refPwdInpt: any = useRef();
   const refPwdConfirmInpt: any = useRef();
+
+  //const dispatch = useDispatch();
+
+  const [userCredentials, setUserCredentials] = useState({
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  });
+
+  const { name, email, password, passwordConfirm } = userCredentials;
 
   // *** focuses first input on component did mount
   useEffect(() => {
@@ -27,22 +56,31 @@ const Create = () => {
   }, []);
 
   // *** sets focus and blinking on input click event
-  const handleClick = (e: any) => {
+  const handleInputClick = (e: any) => {
     if (e.target === refUsrCont.current) {
       refUsrInpt.current?.focus();
       setHiddenUsr(!hiddenUsr);
       setHiddenPwd(true);
       setHiddenPwdConfirm(true);
+      setHiddenEmail(true);
     } else if (e.target === refPwdCont.current) {
       refPwdInpt.current?.focus();
       setHiddenPwd(!hiddenPwd);
       setHiddenUsr(true);
       setHiddenPwdConfirm(true);
-    } else {
+      setHiddenEmail(true);
+    } else if (e.target === refPwdConfirmCont.current) {
       refPwdConfirmInpt.current?.focus();
       setHiddenPwdConfirm(!hiddenPwdConfirm);
       setHiddenUsr(true);
       setHiddenPwd(true);
+      setHiddenEmail(true);
+    } else {
+      refEmailInpt.current?.focus();
+      setHiddenPwdConfirm(true);
+      setHiddenUsr(true);
+      setHiddenPwd(true);
+      setHiddenEmail(!hiddenEmail);
     }
   };
 
@@ -52,7 +90,7 @@ const Create = () => {
     setShifrPwdConfirm('*'.repeat(passwordConfirm.length));
   }, [password, passwordConfirm]);
 
-  // *** sets blinking cursor to the first input
+  // *** sets blinking cursor to the name input
   useEffect(() => {
     if (document.activeElement === ReactDOM.findDOMNode(refUsrInpt.current))
       cursorEvent.current = setInterval(() => setHiddenUsr(!hiddenUsr), 500);
@@ -61,7 +99,19 @@ const Create = () => {
     };
   });
 
-  // *** sets blinking cursor to the second input
+  // *** sets blinking cursor to the email input
+  useEffect(() => {
+    if (document.activeElement === ReactDOM.findDOMNode(refEmailInpt.current))
+      cursorEvent.current = setInterval(
+        () => setHiddenEmail(!hiddenEmail),
+        500
+      );
+    return () => {
+      clearInterval(cursorEvent.current);
+    };
+  });
+
+  // *** sets blinking cursor to the pass input
   useEffect(() => {
     if (document.activeElement === ReactDOM.findDOMNode(refPwdInpt.current))
       cursorEvent.current = setInterval(() => setHiddenPwd(!hiddenPwd), 500);
@@ -70,7 +120,7 @@ const Create = () => {
     };
   });
 
-  // *** sets blinking cursor to the third input
+  // *** sets blinking cursor to the pass confirm input
   useEffect(() => {
     if (
       document.activeElement === ReactDOM.findDOMNode(refPwdConfirmInpt.current)
@@ -86,11 +136,67 @@ const Create = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (password !== passwordConfirm) {
-      setPwdMatch(false);
-    } else {
-      setPwdMatch(true);
-    }
+
+    if (!name)
+      return setSubmitCheck({
+        checkName: false,
+        checkPwd: true,
+        pwdMatchSuccess: true,
+        checkEmail: true,
+        notValidEmail: true,
+      });
+
+    if (!email)
+      return setSubmitCheck({
+        checkName: true,
+        checkEmail: false,
+        checkPwd: true,
+        pwdMatchSuccess: true,
+        notValidEmail: true,
+      });
+
+    if (!password || !passwordConfirm)
+      return setSubmitCheck({
+        checkName: true,
+        checkEmail: true,
+        checkPwd: false,
+        pwdMatchSuccess: true,
+        notValidEmail: true,
+      });
+
+    if (password !== passwordConfirm)
+      return setSubmitCheck({
+        checkName: true,
+        checkEmail: true,
+        checkPwd: true,
+        pwdMatchSuccess: false,
+        notValidEmail: true,
+      });
+
+    console.log('success!');
+    setSubmitCheck({
+      checkName: true,
+      checkEmail: true,
+      checkPwd: true,
+      pwdMatchSuccess: true,
+      notValidEmail: true,
+    });
+
+    if (!ValidateEmail(email))
+      return setSubmitCheck({
+        checkName: true,
+        checkEmail: true,
+        checkPwd: true,
+        pwdMatchSuccess: true,
+        notValidEmail: false,
+      });
+    //const credentials = { name, password };
+    //dispatch(signUpStart(credentials));
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setUserCredentials({ ...userCredentials, [name]: value });
   };
 
   return (
@@ -102,9 +208,13 @@ const Create = () => {
         Please enter your credentials to create a new user account.
       </p>
       <form onSubmit={(e) => handleSubmit(e)} className="form">
-        <div ref={refUsrCont} onClick={(e) => handleClick(e)} className="cmd1">
+        <div
+          ref={refUsrCont}
+          onClick={(e) => handleInputClick(e)}
+          className="cmd1"
+        >
           <div className="span">{'Usr >  '}</div>
-          <span className="span1">{user}</span>
+          <span className="span1">{name}</span>
           <div
             className="cursor1"
             style={
@@ -119,11 +229,42 @@ const Create = () => {
             ref={refUsrInpt}
             className="input1"
             type="text"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
+            name="name"
+            onChange={handleChange}
+            value={name}
           />
         </div>
-        <div ref={refPwdCont} onClick={(e) => handleClick(e)} className="cmd2">
+        <div
+          ref={refEmailCont}
+          onClick={(e) => handleInputClick(e)}
+          className="cmd1"
+        >
+          <div className="span">{'Email >  '}</div>
+          <span className="span1">{email}</span>
+          <div
+            className="cursor1"
+            style={
+              hiddenEmail ? { visibility: 'hidden' } : { visibility: 'visible' }
+            }
+          ></div>
+          <input
+            required
+            type="email"
+            autoComplete="off"
+            minLength={4}
+            maxLength={16}
+            ref={refEmailInpt}
+            className="input1"
+            name="email"
+            onChange={handleChange}
+            value={email}
+          />
+        </div>
+        <div
+          ref={refPwdCont}
+          onClick={(e) => handleInputClick(e)}
+          className="cmd2"
+        >
           <div className="span">{'Pwd >  '}</div>
           <span className="span2">{shifrPwd}</span>
           <div
@@ -139,13 +280,14 @@ const Create = () => {
             minLength={8}
             type="text"
             className="input2"
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            onChange={handleChange}
             value={password}
           />
         </div>
         <div
           ref={refPwdConfirmCont}
-          onClick={(e) => handleClick(e)}
+          onClick={(e) => handleInputClick(e)}
           className="cmd3"
         >
           <div className="span">{'Pwd again >  '}</div>
@@ -165,23 +307,42 @@ const Create = () => {
             minLength={8}
             type="text"
             className="input3"
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            value={passwordConfirm}
+            name="passwordConfirm"
+            onChange={handleChange}
+            value={userCredentials.passwordConfirm}
           />
         </div>
-        {pwdMatch ? null : <p id="info-pwd">Passwords Don't Match</p>}
-        <div className="button">
-          <button
-            onClick={(e) => handleSubmit(e)}
-            type="submit"
-            className="login"
-          >
-            Submit
-          </button>
+        {pwdMatchSuccess ? null : <p id="info-fail">Password doesn't match</p>}
+        {checkName ? null : <p id="info-fail">Please enter your name</p>}
+        {checkEmail ? null : <p id="info-fail">Please enter your email</p>}
+        {notValidEmail ? null : (
+          <p id="info-fail">Please enter your email correctly</p>
+        )}
+        {checkPwd ? null : <p id="info-fail">Please enter your password</p>}
+        <div className="button" id="create-user-btn">
+          <Link to="/">
+            <button
+              onClick={(e) => handleSubmit(e)}
+              type="submit"
+              className="login"
+            >
+              Submit
+            </button>
+          </Link>
+          <Link to="/">
+            <button className="return">Return</button>
+          </Link>
         </div>
       </form>
     </div>
   );
 };
+
+function ValidateEmail(email: string) {
+  if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    return true;
+  }
+  return false;
+}
 
 export default Create;

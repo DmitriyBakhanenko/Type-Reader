@@ -1,6 +1,11 @@
 @import '../colors';
 @import './Login.style.scss';
 
-#info-pwd {
+#info-fail {
+  text-align: center;
   color: red;
+}
+
+#create-user-btn {
+  text-align: center;
 }

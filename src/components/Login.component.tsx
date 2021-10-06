@@ -23,9 +23,6 @@ const Login = () => {
 
   // *** sets focus and blinking on input click event
   const handleClick = (e: any) => {
-    //console.log(refUsrContainer.current);
-    //console.log(e.target);
-    //console.log(refPwdInput.current);
     if (e.target === refUsrContainer.current) {
       refUsrInput.current?.focus();
       setHiddenUsr(!hiddenUsr);
@@ -130,9 +127,11 @@ const Login = () => {
           />
         </div>
         <div className="button">
-          <button className="login">login</button>
-          <Link to={'/create'}>
-            <button className="create">new user</button>
+          <Link to="/menu" className="menu-link">
+            <button className="login">login</button>
+          </Link>
+          <Link to="/create" className="create-link">
+            <button>new user</button>
           </Link>
         </div>
         <div className="button2">
