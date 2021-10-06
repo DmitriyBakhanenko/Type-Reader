@@ -24,7 +24,6 @@
   .header {
     margin: 20px 40px;
     background-color: $background-main;
-    //text-align: center;
     padding-left: 10px;
 
     .sign {
@@ -94,30 +93,36 @@
       }
     }
 
-    .cmd2 {
+    .cmd2,
+    .cmd3 {
       @extend .cmd1;
 
-      .span2 {
+      .span2,
+      .span3 {
         @extend .span1;
       }
 
-      .cursor2 {
+      .cursor2,
+      .cursor3 {
         @extend .cursor1;
       }
 
-      .input2 {
+      .input2,
+      .input3 {
         @extend .input1;
       }
     }
 
-    .cmd1 {
+    .cmd1,
+    .cmd2 {
       margin-bottom: 10px;
     }
 
     .button,
-    .button2 {
-      display: flex;
-      flex-direction: column;
+    .button2,
+    .button3 {
+      display: inline-block;
+      margin: 12px 0 0 0;
 
       button {
         &:first-child {
@@ -125,6 +130,7 @@
         }
 
         height: 35px;
+        width: 48%;
         color: $text-color;
         text-transform: uppercase;
         border: none;
@@ -132,7 +138,6 @@
         background-color: $button-color;
         font-weight: 700;
         letter-spacing: 1px;
-        width: 48%;
 
         &:hover {
           background-color: lighten($button-color, $amount: 10);

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router-dom';
 import './Login.style.scss';
 
 const Login = () => {
@@ -67,14 +68,14 @@ const Login = () => {
         <span className="sign">{'_> '}</span>Welcome.
       </h1>
       <p className="info">
-        This application was designed to teach you the touch typing while you
+        This application was designed to teach you the touch typing, while you
         enjoy reading your favorite book. The project is non-commercial and open
-        source. For the further information please visit my github{' '}
+        source. For the further information please visit{' '}
         <a
           className="source-link"
           href="https://github.com/devCote/Type-Reader"
         >
-          *source code
+          github source-code
         </a>
         . Application keeps your privacy and does not share with other 3rd
         parties. Enjoy your time!
@@ -130,7 +131,9 @@ const Login = () => {
         </div>
         <div className="button">
           <button className="login">login</button>
-          <button className="create">new user</button>
+          <Link to={'/create'}>
+            <button className="create">new user</button>
+          </Link>
         </div>
         <div className="button2">
           <button className="google">google</button>

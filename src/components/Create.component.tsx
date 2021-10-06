@@ -94,51 +94,51 @@ const Create = () => {
   };
 
   return (
-    <div className='login container'>
-      <h1 className='header'>
-        <span className='sign'>{'_> '}</span>Create.
+    <div className="login container">
+      <h1 className="header">
+        <span className="sign">{'_> '}</span>Create.
       </h1>
-      <p className='info'>
+      <p className="info">
         Please enter your credentials to create a new user account.
       </p>
-      <form onSubmit={(e) => handleSubmit(e)} className='form'>
-        <div ref={refUsrCont} onClick={(e) => handleClick(e)} className='cmd1'>
-          <div className='span'>{'Usr >  '}</div>
-          <span className='span1'>{user}</span>
+      <form onSubmit={(e) => handleSubmit(e)} className="form">
+        <div ref={refUsrCont} onClick={(e) => handleClick(e)} className="cmd1">
+          <div className="span">{'Usr >  '}</div>
+          <span className="span1">{user}</span>
           <div
-            className='cursor1'
+            className="cursor1"
             style={
               hiddenUsr ? { visibility: 'hidden' } : { visibility: 'visible' }
             }
           ></div>
           <input
             required
-            autoComplete='off'
+            autoComplete="off"
             minLength={4}
             maxLength={16}
             ref={refUsrInpt}
-            className='input1'
-            type='text'
+            className="input1"
+            type="text"
             onChange={(e) => setUser(e.target.value)}
             value={user}
           />
         </div>
-        <div ref={refPwdCont} onClick={(e) => handleClick(e)} className='cmd2'>
-          <div className='span'>{'Pwd >  '}</div>
-          <span className='span2'>{shifrPwd}</span>
+        <div ref={refPwdCont} onClick={(e) => handleClick(e)} className="cmd2">
+          <div className="span">{'Pwd >  '}</div>
+          <span className="span2">{shifrPwd}</span>
           <div
             style={
               hiddenPwd ? { visibility: 'hidden' } : { visibility: 'visible' }
             }
-            className='cursor2'
+            className="cursor2"
           ></div>
           <input
             required
-            autoComplete='off'
+            autoComplete="off"
             ref={refPwdInpt}
             minLength={8}
-            type='text'
-            className='input2'
+            type="text"
+            className="input2"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
@@ -146,35 +146,35 @@ const Create = () => {
         <div
           ref={refPwdConfirmCont}
           onClick={(e) => handleClick(e)}
-          className='cmd3'
+          className="cmd3"
         >
-          <div className='span'>{'Pwd again >  '}</div>
-          <span className='span3'>{shifrPwdConfirm}</span>
+          <div className="span">{'Pwd again >  '}</div>
+          <span className="span3">{shifrPwdConfirm}</span>
           <div
             style={
               hiddenPwdConfirm
                 ? { visibility: 'hidden' }
                 : { visibility: 'visible' }
             }
-            className='cursor3'
+            className="cursor3"
           ></div>
           <input
             required
-            autoComplete='off'
+            autoComplete="off"
             ref={refPwdConfirmInpt}
             minLength={8}
-            type='text'
-            className='input3'
+            type="text"
+            className="input3"
             onChange={(e) => setPasswordConfirm(e.target.value)}
             value={passwordConfirm}
           />
         </div>
-        {pwdMatch ? null : <p className='info'>Passwords Don't Match</p>}
-        <div className='button'>
+        {pwdMatch ? null : <p id="info-pwd">Passwords Don't Match</p>}
+        <div className="button">
           <button
             onClick={(e) => handleSubmit(e)}
-            type='submit'
-            className='login'
+            type="submit"
+            className="login"
           >
             Submit
           </button>
