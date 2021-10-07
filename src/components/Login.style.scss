@@ -7,6 +7,7 @@
   width: 35%;
   display: flex;
   flex-direction: column;
+  border-radius: 25px;
 
   @media all and (min-width: 1000px) and (max-width: 1200px) {
     width: 40%;
@@ -25,6 +26,7 @@
     margin: 20px 40px;
     background-color: $background-main;
     padding-left: 10px;
+    border-radius: 10px;
 
     .sign {
       color: $green-color;
@@ -62,6 +64,7 @@
       padding: 12px;
       overflow: hidden;
       height: 40px;
+      border-radius: 10px;
 
       &:hover {
         cursor: text;
@@ -143,6 +146,7 @@
         background-color: $button-color;
         font-weight: 700;
         letter-spacing: 1px;
+        border-radius: 10px;
 
         &:hover {
           background-color: lighten($button-color, $amount: 10);

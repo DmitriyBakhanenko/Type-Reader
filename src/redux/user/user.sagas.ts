@@ -78,17 +78,17 @@ interface Data {
   payload: {
     email: string;
     password: string;
-    name: string;
+    displayName: string;
   };
 }
 
 export function* signUp(data: Data) {
   try {
     const {
-      payload: { name, password, email },
+      payload: { displayName, password, email },
     } = data;
     const { user } = yield auth.createUserWithEmailAndPassword(email, password);
-    yield createUserProfileDocument(user, { name });
+    yield createUserProfileDocument(user, { displayName });
     yield put(signUpSuccess());
     yield signInWithEmailAndPassword(data);
   } catch (error) {

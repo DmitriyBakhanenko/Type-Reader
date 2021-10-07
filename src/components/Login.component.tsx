@@ -1,36 +1,43 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {
+  emailSignInStart,
+  googleSignInStart,
+} from '../redux/user/user.actions';
 import './Login.style.scss';
 
 const Login = () => {
-  const [user, setUser] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [hiddenUsr, setHiddenUsr] = useState(true);
+  const [hiddenEmail, setHiddenEmail] = useState(true);
   const [hiddenPwd, setHiddenPwd] = useState(true);
   const [shifr, setShifr] = useState('');
 
   const cursorEvent: any = useRef();
-  const refUsrContainer: any = useRef();
+  const refEmailContainer: any = useRef();
   const refPwdContainer: any = useRef();
-  const refUsrInput: any = useRef();
+  const refEmailInput: any = useRef();
   const refPwdInput: any = useRef();
+
+  const dispatch = useDispatch();
 
   // *** focuses first input on component did mount
   useEffect(() => {
-    refUsrInput.current?.focus();
+    refEmailInput.current?.focus();
   }, []);
 
   // *** sets focus and blinking on input click event
   const handleClick = (e: any) => {
-    if (e.target === refUsrContainer.current) {
-      refUsrInput.current?.focus();
-      setHiddenUsr(!hiddenUsr);
+    if (e.target === refEmailContainer.current) {
+      refEmailInput.current?.focus();
+      setHiddenEmail(!hiddenEmail);
       setHiddenPwd(true);
     } else {
       refPwdInput.current?.focus();
       setHiddenPwd(!hiddenPwd);
-      setHiddenUsr(true);
+      setHiddenEmail(true);
     }
   };
 
@@ -41,8 +48,13 @@ const Login = () => {
 
   // *** sets blinking cursor to the first input
   useEffect(() => {
-    if (document.activeElement === ReactDOM.findDOMNode(refUsrInput.current)) {
-      cursorEvent.current = setInterval(() => setHiddenUsr(!hiddenUsr), 500);
+    if (
+      document.activeElement === ReactDOM.findDOMNode(refEmailInput.current)
+    ) {
+      cursorEvent.current = setInterval(
+        () => setHiddenEmail(!hiddenEmail),
+        500
+      );
     }
     return () => {
       clearInterval(cursorEvent.current);
@@ -58,6 +70,16 @@ const Login = () => {
       clearInterval(cursorEvent.current);
     };
   });
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const userCredentials = { email, password };
+    dispatch(emailSignInStart(userCredentials));
+  };
+
+  const googleSignIn = () => {
+    dispatch(googleSignInStart());
+  };
 
   return (
     <div className="login container">
@@ -79,27 +101,27 @@ const Login = () => {
       </p>
       <form className="form">
         <div
-          ref={refUsrContainer}
+          ref={refEmailContainer}
           onClick={(e) => handleClick(e)}
           className="cmd1"
         >
-          <div className="span">{'User >  '}</div>
-          <span className="span1">{user}</span>
+          <div className="span">{'Email >  '}</div>
+          <span className="span1">{email}</span>
           <div
             className="cursor1"
             style={
-              hiddenUsr ? { visibility: 'hidden' } : { visibility: 'visible' }
+              hiddenEmail ? { visibility: 'hidden' } : { visibility: 'visible' }
             }
           ></div>
           <input
             required
             autoComplete="off"
             minLength={4}
-            ref={refUsrInput}
+            ref={refEmailInput}
             className="input1"
             type="text"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
         </div>
         <div
@@ -127,15 +149,19 @@ const Login = () => {
           />
         </div>
         <div className="button">
-          <Link to="/menu" className="menu-link">
-            <button className="login">login</button>
+          <Link to="#" className="menu-link">
+            <button type="submit" onClick={handleSubmit} className="login">
+              login
+            </button>
           </Link>
           <Link to="/create" className="create-link">
             <button>new user</button>
           </Link>
         </div>
         <div className="button2">
-          <button className="google">google</button>
+          <button className="google" onClick={googleSignIn}>
+            google
+          </button>
           <button className="facebook">facebook</button>
         </div>
       </form>

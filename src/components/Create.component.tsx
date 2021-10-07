@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-//import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-//import { signUpStart } from '../redux/user/user.actions';
+import { signUpStart } from '../redux/user/user.actions';
 import './Create.style.scss';
 
 const Create = () => {
@@ -39,16 +39,16 @@ const Create = () => {
   const refPwdInpt: any = useRef();
   const refPwdConfirmInpt: any = useRef();
 
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [userCredentials, setUserCredentials] = useState({
-    name: '',
+    displayName: '',
     email: '',
     password: '',
     passwordConfirm: '',
   });
 
-  const { name, email, password, passwordConfirm } = userCredentials;
+  const { displayName, email, password, passwordConfirm } = userCredentials;
 
   // *** focuses first input on component did mount
   useEffect(() => {
@@ -137,7 +137,7 @@ const Create = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    if (!name)
+    if (!displayName)
       return setSubmitCheck({
         checkName: false,
         checkPwd: true,
@@ -173,6 +173,15 @@ const Create = () => {
         notValidEmail: true,
       });
 
+    if (!ValidateEmail(email))
+      return setSubmitCheck({
+        checkName: true,
+        checkEmail: true,
+        checkPwd: true,
+        pwdMatchSuccess: true,
+        notValidEmail: false,
+      });
+
     console.log('success!');
     setSubmitCheck({
       checkName: true,
@@ -182,16 +191,8 @@ const Create = () => {
       notValidEmail: true,
     });
 
-    if (!ValidateEmail(email))
-      return setSubmitCheck({
-        checkName: true,
-        checkEmail: true,
-        checkPwd: true,
-        pwdMatchSuccess: true,
-        notValidEmail: false,
-      });
-    //const credentials = { name, password };
-    //dispatch(signUpStart(credentials));
+    const credentials = { displayName, password, email };
+    dispatch(signUpStart(credentials));
   };
 
   const handleChange = (e: any) => {
@@ -213,8 +214,8 @@ const Create = () => {
           onClick={(e) => handleInputClick(e)}
           className="cmd1"
         >
-          <div className="span">{'Usr >  '}</div>
-          <span className="span1">{name}</span>
+          <div className="span">{'Name >  '}</div>
+          <span className="span1">{displayName}</span>
           <div
             className="cursor1"
             style={
@@ -229,9 +230,9 @@ const Create = () => {
             ref={refUsrInpt}
             className="input1"
             type="text"
-            name="name"
+            name="displayName"
             onChange={handleChange}
-            value={name}
+            value={displayName}
           />
         </div>
         <div
@@ -252,7 +253,7 @@ const Create = () => {
             type="email"
             autoComplete="off"
             minLength={4}
-            maxLength={16}
+            maxLength={26}
             ref={refEmailInpt}
             className="input1"
             name="email"
