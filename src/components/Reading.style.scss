@@ -1,0 +1,12 @@
+.text-container {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  margin-top: 50px;
+  color: white;
+  font-size: 2rem;
+
+  .text-input {
+    display: none;
+  }
+}
