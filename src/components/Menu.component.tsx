@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { signOutStart } from '../redux/user/user.actions';
 import './Menu.style.scss';
-import Reading from './Reading.component';
 
 const Menu = () => {
   const dispatch = useDispatch();
@@ -9,7 +9,9 @@ const Menu = () => {
   return (
     <div className="menu-container">
       <div style={{ color: 'red' }}>Menu</div>
-      <button>Start Reading</button>
+      <Link to="/reading">
+        <button>Start Reading</button>
+      </Link>
       <button onClick={() => dispatch(signOutStart())}>logoff</button>
     </div>
   );

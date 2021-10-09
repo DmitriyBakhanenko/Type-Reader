@@ -7,6 +7,7 @@ import {
 } from '../../firebase/firebase';
 import { Response } from '../response.interface';
 import {
+  checkUserSessionFinish,
   signInFailure,
   signInSucces,
   signOutSuccess,
@@ -27,7 +28,7 @@ export function* getSnapshotFromUserAuth(userAuth: any) {
     yield put(signInSucces({ id: userSnapShot.id, ...userSnapShot.data() }));
   } catch (error) {
     yield put(signInFailure('error'));
-    alert('something went wrong!');
+    console.error('something went wrong!');
   }
 }
 
@@ -37,7 +38,7 @@ export function* signInWithGoogle() {
     yield getSnapshotFromUserAuth(user);
   } catch (error) {
     yield put(signInFailure('error'));
-    alert('something went wrong!');
+    console.error('something went wrong!');
   }
 }
 
@@ -49,7 +50,7 @@ export function* signInWithEmailAndPassword({
     yield getSnapshotFromUserAuth(user);
   } catch (error) {
     yield put(signInFailure('error'));
-    alert('something went wrong!');
+    console.error('something went wrong!');
   }
 }
 
@@ -60,8 +61,9 @@ export function* isUserAuthenticated() {
     yield getSnapshotFromUserAuth(userAuth);
   } catch (error) {
     yield put(signInFailure('error'));
-    alert('something went wrong!');
+    console.error('something went wrong!');
   }
+  yield put(checkUserSessionFinish());
 }
 
 export function* signOut() {
@@ -70,7 +72,7 @@ export function* signOut() {
     yield put(signOutSuccess());
   } catch (error) {
     yield put(signInFailure('error'));
-    alert('something went wrong!');
+    console.error('something went wrong!');
   }
 }
 
@@ -93,7 +95,7 @@ export function* signUp(data: Data) {
     yield signInWithEmailAndPassword(data);
   } catch (error) {
     yield put(signInFailure('error'));
-    alert('something went wrong!');
+    console.error('something went wrong!');
   }
 }
 
@@ -110,7 +112,7 @@ export function* onGoogleSignInStart() {
 
 export function* onCheckUserSession() {
   yield takeLatest_any(
-    userActionsTypes.CHECK_USER_SESSION,
+    userActionsTypes.CHECK_USER_SESSION_START,
     isUserAuthenticated
   );
 }

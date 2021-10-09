@@ -50,6 +50,16 @@ const userReducer = (state = INITIAL_STATE, action: any) => {
         isLoading: false,
         error: action.payload,
       };
+    case userActionsTypes.CHECK_USER_SESSION_START:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case userActionsTypes.CHECK_USER_SESSION_FINISH:
+      return {
+        ...state,
+        isLoading: false,
+      };
 
     default:
       return state;

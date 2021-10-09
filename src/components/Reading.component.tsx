@@ -1,12 +1,19 @@
 /*
- * 1. create component Reading
- * 2. load text to the DOM
- * 3. text char iteration initial text opacity 0.5
- * 4. check if window.keydown === textRef.char then pass color green or color red
+ * done 1. create component Reading
+ * done 2. load text to the DOM
+ * done 3. text char iteration initial text opacity 0.5
+ * done 4. check if window.keydown === textRef.char then pass color green or color red
  * 5. save progress to redux store and sync with the server
  * 6. check progress from server before load and start from previous char
  */
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import {
+  progressRefresh,
+  progressTracking,
+} from '../redux/progress/progress.actions';
+import { selectCurrentProgress } from '../redux/progress/progress.selectors';
 import './Reading.style.scss';
 
 const Reading = () => {
@@ -14,22 +21,18 @@ const Reading = () => {
   const [input, setInput] = useState('');
   const [charColor, setCharColor] = useState('black');
   const [text, setText] = useState(
-    "As with many techniques in JavaScript, it's mainly a matter of taste when deciding which one to use. However, be aware of the speed impacts of the string-to-array conversion as well as the compatibility issues of the bracket notation. I advise you to pick the most readable technique and only care for speed optimization if you have a performance problem and to solve compatibility issues through transpiling."
+    "As with many techniques in JavaScript, it's mainly a matter of taste when deciding which one to use."
   );
 
   const charRef: any = useRef();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const lastProgress = useSelector(selectCurrentProgress);
 
-  const keyFilter = [
-    'Alt',
-    'Control',
-    'Shift',
-    'Escape',
-    'Tab',
-    'Meta',
-    'CapsLock',
-  ];
+  const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
   const handleKeyDown = (e: any) => {
+    if (e.key === 'Escape') return history.push('/');
     if (!keyFilter.includes(e.key)) {
       setInput(e.key);
     }
@@ -37,10 +40,15 @@ const Reading = () => {
 
   useEffect(() => {
     if (!input) return;
+    if (text.length === progress) {
+      dispatch(progressRefresh());
+      history.push('/');
+    }
     if (charRef.current.className === input) {
       setCharColor('black');
       setProgress(progress + 1);
       setInput('');
+      dispatch(progressTracking(progress));
     } else {
       setCharColor('red');
     }
@@ -48,6 +56,8 @@ const Reading = () => {
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
+    if (lastProgress) setProgress(lastProgress);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const textManipulations = (text: string, progress: number) => {
@@ -71,10 +81,7 @@ const Reading = () => {
   };
   return (
     <div className="text-container">
-      <p className="text">
-        {textManipulations(text, progress)}
-        <span style={{ color: 'red', opacity: 1 }}>DD</span>
-      </p>
+      <p className="text">{textManipulations(text, progress)}</p>
     </div>
   );
 };

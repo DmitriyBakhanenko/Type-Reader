@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { signUpStart } from '../redux/user/user.actions';
 import './Create.style.scss';
 
@@ -12,6 +12,7 @@ const Create = () => {
   const [hiddenPwdConfirm, setHiddenPwdConfirm] = useState(true);
   const [shifrPwd, setShifrPwd] = useState('');
   const [shifrPwdConfirm, setShifrPwdConfirm] = useState('');
+  const history = useHistory();
 
   const [submitCheck, setSubmitCheck] = useState({
     pwdMatchSuccess: true,
@@ -182,7 +183,6 @@ const Create = () => {
         notValidEmail: false,
       });
 
-    console.log('success!');
     setSubmitCheck({
       checkName: true,
       checkEmail: true,
@@ -193,6 +193,7 @@ const Create = () => {
 
     const credentials = { displayName, password, email };
     dispatch(signUpStart(credentials));
+    history.push('/');
   };
 
   const handleChange = (e: any) => {

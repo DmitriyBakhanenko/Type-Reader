@@ -20,7 +20,11 @@ export const emailSignInStart = (userCredentials: any) => ({
 });
 
 export const checkUserSession = () => ({
-  type: userActionsTypes.CHECK_USER_SESSION,
+  type: userActionsTypes.CHECK_USER_SESSION_START,
+});
+
+export const checkUserSessionFinish = () => ({
+  type: userActionsTypes.CHECK_USER_SESSION_FINISH,
 });
 
 export const signOutStart = () => ({
@@ -46,6 +50,6 @@ export const signUpSuccess = () => ({
 });
 
 //export const signUpFailure = (error: string) => ({
-  //type: userActionsTypes.SIGN_UP_FAILURE,
-  //payload: error,
+//type: userActionsTypes.SIGN_UP_FAILURE,
+//payload: error,
 //})
