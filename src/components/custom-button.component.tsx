@@ -6,7 +6,7 @@ interface Props {
   apply?: boolean;
   overlay?: boolean;
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: any;
   type?: any;
   className?: string;
   component?: any;

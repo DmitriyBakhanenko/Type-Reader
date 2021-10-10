@@ -1,11 +1,3 @@
-/*
- * done 1. create component Reading
- * done 2. load text to the DOM
- * done 3. text char iteration initial text opacity 0.5
- * done 4. check if window.keydown === textRef.char then pass color green or color red
- * 5. save progress to redux store and sync with the server
- * 6. check progress from server before load and start from previous char
- */
 /* eslint-disable */
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -14,12 +6,17 @@ import { useHistory } from 'react-router-dom';
 import {
   progressRefresh,
   progressTracking,
+  saveProgress,
 } from '../redux/progress/progress.actions';
-import { selectCurrentProgress } from '../redux/progress/progress.selectors';
+import {
+  selectCurrentProgress,
+  selectCustomText,
+} from '../redux/progress/progress.selectors';
 import './Reading.style.scss';
 
 const Reading = () => {
   const [progress, setProgress] = useState(0);
+  const [startTime, setStartTime] = useState(0);
   const [input, setInput] = useState('');
   const [charColor, setCharColor] = useState('black');
   const [text, setText] = useState(
@@ -27,14 +24,38 @@ const Reading = () => {
   );
 
   const charRef: any = useRef();
+  const textBeforRef: any = useRef();
   const history = useHistory();
   const dispatch = useDispatch();
   const lastProgress = useSelector(selectCurrentProgress);
+  const customText = useSelector(selectCustomText);
 
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
+  const errMap: any = new Map();
+
+  const getFinalResults = () => {
+    const finalTime = (Date.now() - startTime) / 1000;
+    const wordCount = textBeforRef.current?.className?.split(' ').length;
+    const wpm = finalTime >= 60 ? (wordCount * 60) / finalTime : null;
+
+    let errorsAll: any = 0;
+    errMap.forEach((_key: any, value: any) => (errorsAll = errorsAll + value));
+
+    for (let [key, value] of errMap) {
+      errMap.set(key, (value / errorsAll) * 100);
+    }
+
+    return {
+      time: finalTime,
+      wpm: wpm,
+      errors: errMap,
+    };
+  };
 
   const handleKeyDown = (e: any) => {
+    e.preventDefault();
     if (e.key === 'Escape') {
+      dispatch(saveProgress(getFinalResults()));
       return history.push('/');
     }
     if (!keyFilter.includes(e.key)) {
@@ -42,25 +63,38 @@ const Reading = () => {
     }
   };
 
+  const setTimer = () => {
+    if (startTime) return;
+    setStartTime(Date.now());
+  };
+
   useEffect(() => {
     if (!input) return;
-    if (text.length === progress) {
+    const txtChar = charRef.current.className;
+    setTimer();
+
+    if (text.length === progress + 1) {
+      dispatch(saveProgress(getFinalResults()));
       dispatch(progressRefresh());
       history.push('/');
     }
-    if (charRef.current.className === input) {
+    if (txtChar === input) {
       setCharColor('black');
       setProgress(progress + 1);
       setInput('');
       dispatch(progressTracking(progress));
     } else {
       setCharColor('red');
+      const prev = errMap.get(txtChar) || 1;
+      errMap.set(txtChar, prev + 1);
+      console.log(errMap.get(txtChar));
     }
   }, [input, progress]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     if (lastProgress) setProgress(lastProgress);
+    if (customText) setText(customText);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
@@ -71,7 +105,9 @@ const Reading = () => {
 
     return (
       <React.Fragment>
-        <span>{textBefor}</span>
+        <span ref={textBeforRef} className={textBefor}>
+          {textBefor}
+        </span>
         <span
           ref={charRef}
           className={currentChar}

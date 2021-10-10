@@ -4,6 +4,10 @@ const INITIAL_STATE = {
   progress: 0,
   error: null,
   isLoading: false,
+  customText: '',
+  time: 0,
+  errors: null,
+  wpm: 0,
 };
 
 const progressReducer = (state = INITIAL_STATE, action: any) => {
@@ -22,6 +26,18 @@ const progressReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         progress: 0,
+      };
+    case progressActionsTypes.CUSTOM_TEXT_ADD:
+      return {
+        ...state,
+        customText: action.payload,
+      };
+    case progressActionsTypes.SAVE_PROGRESS:
+      return {
+        ...state,
+        time: action.payload.time,
+        wpm: action.payload.wpm,
+        errors: action.payload.errors,
       };
 
     default:
