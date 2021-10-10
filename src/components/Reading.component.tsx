@@ -6,6 +6,8 @@
  * 5. save progress to redux store and sync with the server
  * 6. check progress from server before load and start from previous char
  */
+/* eslint-disable */
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -32,7 +34,9 @@ const Reading = () => {
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Escape') return history.push('/');
+    if (e.key === 'Escape') {
+      return history.push('/');
+    }
     if (!keyFilter.includes(e.key)) {
       setInput(e.key);
     }

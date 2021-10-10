@@ -28,7 +28,11 @@ function App() {
           render={() => (currentUser ? <Menu /> : <Login />)}
         />
         <Route exact path={'/create'} component={Create} />
-        <Route exact path={'/reading'} component={Reading} />
+        <Route
+          exact
+          path={'/reading'}
+          render={() => (currentUser ? <Reading /> : <Login />)}
+        />
       </Switch>
     </div>
   );

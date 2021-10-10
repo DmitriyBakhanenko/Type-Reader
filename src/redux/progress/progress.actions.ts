@@ -8,3 +8,11 @@ export const progressTracking = (progress: number) => ({
 export const progressRefresh = () => ({
   type: progressActionsTypes.PROGRESS_REFRESH,
 });
+
+export const saveUserProgress = (
+  userAuth: any,
+  progress: number,
+  time: number,
+  wpm: number,
+  errors: object
+) => {};

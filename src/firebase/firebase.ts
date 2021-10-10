@@ -11,6 +11,25 @@ const config = {
   appId: '1:1033621232370:web:af1edb69a19d3edb58ce6b',
 };
 
+export const updateFirestoreUserProgress = async (
+  userAuth: any,
+  progress: number,
+  time: number,
+  wpm: number,
+  errors: object
+) => {
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  try {
+    await userRef.update({
+      progress,
+      time,
+      errors,
+    });
+  } catch (error: any) {
+    console.error(error.message);
+  }
+};
+
 export const createUserProfileDocument = async (
   userAuth: any,
   additionalData: any
@@ -24,9 +43,6 @@ export const createUserProfileDocument = async (
   if (!snapShot.exists) {
     const { displayName, email } = userAuth;
     const createdDate = new Date();
-    console.log(userAuth);
-    console.log(displayName);
-    console.log(email);
 
     try {
       await userRef.set({
@@ -35,7 +51,7 @@ export const createUserProfileDocument = async (
         createdDate,
         ...additionalData,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('error creating user', error.message);
     }
   }

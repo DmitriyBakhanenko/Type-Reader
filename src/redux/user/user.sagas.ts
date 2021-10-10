@@ -57,13 +57,14 @@ export function* signInWithEmailAndPassword({
 export function* isUserAuthenticated() {
   try {
     const userAuth: Response = yield getCurrentUser();
-    if (!userAuth) return;
+    if (!userAuth) yield put(checkUserSessionFinish());
     yield getSnapshotFromUserAuth(userAuth);
+    yield put(checkUserSessionFinish());
   } catch (error) {
     yield put(signInFailure('error'));
     console.error('something went wrong!');
+    yield put(checkUserSessionFinish());
   }
-  yield put(checkUserSessionFinish());
 }
 
 export function* signOut() {

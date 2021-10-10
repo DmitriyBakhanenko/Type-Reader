@@ -88,11 +88,11 @@ const Login = () => {
   };
 
   return (
-    <div className="login container">
+    <React.Fragment>
       {isLoading ? (
         <Spinner />
       ) : (
-        <React.Fragment>
+        <div className="login container">
           <h1 className="header">
             <span className="sign">{'_> '}</span>Welcome.
           </h1>
@@ -163,11 +163,11 @@ const Login = () => {
               />
             </div>
             <div className="button">
-              <div className="menu-link">
+              <Link to="/" className="menu-link">
                 <button type="submit" onClick={handleSubmit} className="login">
                   login
                 </button>
-              </div>
+              </Link>
               <Link to="/create" className="create-link">
                 <button>new user</button>
               </Link>
@@ -179,9 +179,9 @@ const Login = () => {
               <button className="facebook">facebook</button>
             </div>
           </form>
-        </React.Fragment>
+        </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

@@ -2,4 +2,22 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  a {
+    text-decoration: none;
+  }
+
+  .welcome-message {
+    margin-bottom: 50px;
+    color: #fff;
+    opacity: 0.8;
+    font-size: 2rem;
+    text-align: center;
+
+    &:after {
+      //content: '';
+      display: inline-block;
+      width: 100%;
+    }
+  }
 }
