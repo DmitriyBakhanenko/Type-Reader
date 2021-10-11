@@ -4,11 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  progressRefresh,
+  errorTracking,
   progressTracking,
   saveProgress,
 } from '../redux/progress/progress.actions';
 import {
+  selectCurrentErrors,
   selectCurrentProgress,
   selectCustomText,
 } from '../redux/progress/progress.selectors';
@@ -29,26 +30,18 @@ const Reading = () => {
   const dispatch = useDispatch();
   const lastProgress = useSelector(selectCurrentProgress);
   const customText = useSelector(selectCustomText);
+  const errors = useSelector(selectCurrentErrors);
 
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
-  const errMap: any = new Map();
 
   const getFinalResults = () => {
     const finalTime = (Date.now() - startTime) / 1000;
     const wordCount = textBeforRef.current?.className?.split(' ').length;
-    const wpm = finalTime >= 60 ? (wordCount * 60) / finalTime : null;
-
-    let errorsAll: any = 0;
-    errMap.forEach((_key: any, value: any) => (errorsAll = errorsAll + value));
-
-    for (let [key, value] of errMap) {
-      errMap.set(key, (value / errorsAll) * 100);
-    }
+    const wpm = finalTime >= 60 ? Math.floor((wordCount * 60) / finalTime) : 0;
 
     return {
       time: finalTime,
       wpm: wpm,
-      errors: errMap,
     };
   };
 
@@ -70,12 +63,12 @@ const Reading = () => {
 
   useEffect(() => {
     if (!input) return;
-    const txtChar = charRef.current.className;
+    let txtChar: any = charRef.current.className;
+
     setTimer();
 
     if (text.length === progress + 1) {
       dispatch(saveProgress(getFinalResults()));
-      dispatch(progressRefresh());
       history.push('/');
     }
     if (txtChar === input) {
@@ -85,9 +78,10 @@ const Reading = () => {
       dispatch(progressTracking(progress));
     } else {
       setCharColor('red');
-      const prev = errMap.get(txtChar) || 1;
-      errMap.set(txtChar, prev + 1);
-      console.log(errMap.get(txtChar));
+      txtChar =
+        charRef.current.className === ' ' ? 'Space' : charRef.current.className;
+      const newObj = { ...errors, [txtChar]: errors[txtChar] + 1 || 1 };
+      dispatch(errorTracking(newObj));
     }
   }, [input, progress]);
 

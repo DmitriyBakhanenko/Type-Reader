@@ -11,6 +11,7 @@ interface Props {
   className?: string;
   component?: any;
   ref?: any;
+  disabled?: any;
 }
 
 const CustomButton: React.FC<Props> = ({
@@ -18,6 +19,7 @@ const CustomButton: React.FC<Props> = ({
   type,
   children,
   className,
+  disabled,
   ...props
 }) => (
   <button

@@ -7,7 +7,17 @@ export const selectCurrentProgress = createSelector(
   (state) => state.progress
 );
 
+export const selectCurrentErrors = createSelector(
+  [selectProgress],
+  (state) => state.errors
+);
+
 export const selectCustomText = createSelector(
   [selectProgress],
   (state) => state.customText
+);
+
+export const selectIsLoading = createSelector(
+  [selectProgress],
+  (state) => state.isLoading
 );

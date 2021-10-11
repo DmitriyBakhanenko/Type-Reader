@@ -6,8 +6,9 @@ const INITIAL_STATE = {
   isLoading: false,
   customText: '',
   time: 0,
-  errors: null,
+  errors: {},
   wpm: 0,
+  poet: {},
 };
 
 const progressReducer = (state = INITIAL_STATE, action: any) => {
@@ -17,15 +18,39 @@ const progressReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
       };
+    case progressActionsTypes.FETCH_POEM_START:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case progressActionsTypes.FETCH_POEM_FINISH:
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case progressActionsTypes.FETCH_POEM:
+      return {
+        ...state,
+        customText: action.payload.text,
+        poet: { name: action.payload.author, title: action.payload.title },
+      };
     case progressActionsTypes.PROGRESS_TRACKING:
       return {
         ...state,
         progress: action.payload,
       };
+    case progressActionsTypes.ERROR_TRACKING:
+      return {
+        ...state,
+        errors: action.payload,
+      };
     case progressActionsTypes.PROGRESS_REFRESH:
       return {
         ...state,
         progress: 0,
+        errors: {},
+        time: 0,
+        wpm: 0,
       };
     case progressActionsTypes.CUSTOM_TEXT_ADD:
       return {
@@ -37,7 +62,6 @@ const progressReducer = (state = INITIAL_STATE, action: any) => {
         ...state,
         time: action.payload.time,
         wpm: action.payload.wpm,
-        errors: action.payload.errors,
       };
 
     default:

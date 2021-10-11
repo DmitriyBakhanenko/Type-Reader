@@ -24,6 +24,10 @@
     background-color: darken($green-color, 10%);
     //font-size: 20px;
   }
+  &:active {
+    background-color: darken($green-color, 20%);
+    //font-size: 20px;
+  }
 
   &.google-sign-in {
     background-color: #4285f4;
