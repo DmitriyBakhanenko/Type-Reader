@@ -34,6 +34,7 @@ const Menu = () => {
             .replace(/[\…]+/g, ':')
             .replace(/[\“\”]+/g, '"')
             .replace(/[\’]+/g, "'")
+            .replace(/\s+/g, ' ')
         )
       )
     );
