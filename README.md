@@ -1,11 +1,13 @@
-# Getting Started with Create React App
+# Getting Started with TYPE-READER 
 
-## Available Scripts
+## Available Commands 
 
-### `yarn start`
+### `ESC` exit while typing
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##  Future upgrades
 
-## Learn More
+### `TODO` create dynamic statistics fetched from database
+### `TODO` create progress page with graphics
+### `TODO` add some style and fix autoscroll
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
