@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -14,21 +14,26 @@ import { signOutStart } from '../redux/user/user.actions';
 import { selectCurrentUser } from '../redux/user/user.selectors';
 import CustomButton from './custom-button.component';
 import {
-  convertSortedToPercent,
+  sortAndShowPercent,
   countAllMistakes,
   getTime,
   stringFilter,
 } from './helper.methods';
-import { errorsObject, Progres, UserObject } from './interfaces';
+import {
+  ErrorsObject,
+  ObjectShowPercent,
+  Progres,
+  UserObject,
+} from './interfaces';
 import './Menu.style.scss';
 
-const Menu = () => {
+const Menu: React.FC = () => {
   const dispatch = useDispatch();
   const user: UserObject = useSelector(selectCurrentUser);
-  const errors: errorsObject = useSelector(selectCurrentErrors);
+  const errorsObject: ErrorsObject = useSelector(selectCurrentErrors);
   const progress: Progres = useSelector(selectProgress);
   const [message, setMessage] = useState<string>('');
-  const [err, setErr] = useState({});
+  const [objShowPercent, setObjShowPercent] = useState<ObjectShowPercent>({});
 
   const pasteFromClopboard = () => {
     dispatch(progressRefresh());
@@ -39,27 +44,29 @@ const Menu = () => {
   };
 
   useEffect(() => {
-    if (user.displayName) setMessage(`Hello ${user.displayName}`);
+    if (!user.displayName) return;
+    setMessage(`Hello ${user.displayName}`);
   }, [user.displayName]);
 
   useEffect(() => {
-    if (Object.entries(progress.poet).length)
-      setMessage(`${progress.poet.name} - "${progress.poet.title}"`);
+    if (!Object.entries(progress.poet).length) return;
+    setMessage(`${progress.poet.name} - "${progress.poet.title}"`);
+  }, [progress.poet]);
+
+  useEffect(() => {
     if (progress.time === 0) return;
     setMessage('');
-    setErr(errors);
-    const errorsAll: number = countAllMistakes(errors);
-    setErr(convertSortedToPercent(errors, errorsAll));
-  }, [errors, progress.time, progress.customText, progress.poet]);
+    const countedErrors: number = countAllMistakes(errorsObject);
+    setObjShowPercent(sortAndShowPercent(errorsObject, countedErrors));
+  }, [errorsObject, progress.time]);
 
   const renderStatistics = () => {
-    const renderArr: any = [];
-    for (let [key, value] of Object.entries(err)) {
-      const val: any = value;
+    const renderArr: ReactElement<HTMLTableRowElement>[] = [];
+    for (let [key, value] of Object.entries(objShowPercent)) {
       renderArr.push(
         <tr key={key}>
           <td className="">{key}</td>
-          <td className="">{val}</td>
+          <td className="">{value}</td>
         </tr>
       );
     }
@@ -88,7 +95,7 @@ const Menu = () => {
           >
             time: {getTime(Math.floor(progress.time))}
           </p>
-          {Object.entries(errors).length > 0 ? (
+          {Object.entries(errorsObject).length > 0 ? (
             <table>
               <tbody>
                 <tr>

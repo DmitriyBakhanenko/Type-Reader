@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { Dispatch } from 'redux';
 import {
   errorTracking,
   progressTimeStart,
@@ -13,33 +14,34 @@ import {
   selectCustomText,
   selectStartTime,
 } from '../redux/progress/progress.selectors';
+import { ErrorsObject } from './interfaces';
 import './Reading.style.scss';
 
-const Reading = () => {
-  const [progress, setProgress] = useState(0);
-  const [input, setInput] = useState('');
-  const [charColor, setCharColor] = useState('black');
-  const [text, setText] = useState(
-    "As with many techniques in JavaScript, it's mainly a matter of taste when deciding which one to use."
+const Reading: React.FC = () => {
+  const [progress, setProgress] = useState<number>(0);
+  const [input, setInput] = useState<string>('');
+  const [charColor, setCharColor] = useState<string>('black');
+  const [text, setText] = useState<string>(
+    "Test: As with many techniques in JavaScript, it's mainly a matter of taste when deciding which one to use."
   );
+  const history = useHistory<History>();
+  const dispatch = useDispatch<Dispatch>();
 
-  const charRef: any = useRef();
-  const textBeforRef: any = useRef();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const lastProgress = useSelector(selectCurrentProgress);
-  const customText = useSelector(selectCustomText);
-  const errors = useSelector(selectCurrentErrors);
-  const startTime = useSelector(selectStartTime);
+  const charRef = useRef<HTMLSpanElement | null>(null);
+  const textTypedRef = useRef<HTMLParagraphElement | null>(null);
+  const lastProgress: number = useSelector(selectCurrentProgress);
+  const customText: string = useSelector(selectCustomText);
+  const errorsObject: ErrorsObject = useSelector(selectCurrentErrors);
+  const startTime: number = useSelector(selectStartTime);
 
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
-  const getFinalResults = () => {
+  const getFinalResults = (): { time: number; wpm: number } => {
     const finalTime = (Date.now() - startTime) / 1000;
-    console.log(`startTime: ${startTime}`);
-    console.log(finalTime);
-    const wordCount = textBeforRef.current?.className?.split(' ').length;
-    const wpm = finalTime >= 60 ? Math.floor((wordCount * 60) / finalTime) : 0;
+    if (!textTypedRef.current) return { time: 0, wpm: 0 };
+    const wordCount: number = textTypedRef.current.className.split(' ').length;
+    const wpm: number =
+      finalTime >= 60 ? Math.floor((wordCount * 60) / finalTime) : 0;
 
     return {
       time: finalTime,
@@ -50,26 +52,30 @@ const Reading = () => {
   const handleKeyDown = (e: any) => {
     e.preventDefault();
     if (e.key === 'Escape') {
-      console.error(`ESCAPE: ${startTime}`);
       dispatch(saveProgress(getFinalResults()));
       return history.push('/');
     }
-    if (!keyFilter.includes(e.key)) {
-      setInput(e.key);
-    }
+    if (keyFilter.includes(e.key)) return;
+    setInput(e.key);
   };
 
+  const saveProgressAndExit = useRef(() => {
+    dispatch(saveProgress(getFinalResults()));
+    history.push('/');
+  });
+
   useEffect(() => {
-    if (!input) return;
+    if (text.length === progress + 1) saveProgressAndExit.current();
+  }, [progress, text.length]);
+
+  useEffect(() => {
+    if (startTime) return;
+    dispatch(progressTimeStart(Date.now()));
+  }, [startTime, dispatch]);
+
+  useEffect(() => {
+    if (!input || !charRef.current) return;
     let txtChar: any = charRef.current.className;
-    if (!startTime) {
-      console.error('START TIME INSIDE IF');
-      dispatch(progressTimeStart(Date.now()));
-    }
-    if (text.length === progress + 1) {
-      dispatch(saveProgress(getFinalResults()));
-      history.push('/');
-    }
     if (txtChar === input) {
       setCharColor('black');
       setProgress(progress + 1);
@@ -79,21 +85,26 @@ const Reading = () => {
       setCharColor('red');
       txtChar =
         charRef.current.className === ' ' ? 'Space' : charRef.current.className;
-      const newObj = { ...errors, [txtChar]: errors[txtChar] + 1 || 1 };
+      const newObj = {
+        ...errorsObject,
+        [txtChar]: errorsObject[txtChar] + 1 || 1,
+      };
       dispatch(errorTracking(newObj));
     }
-  }, [input, progress]);
+  }, [input, progress, dispatch, errorsObject]);
+
+  useEffect(() => {
+    if (lastProgress) setProgress(lastProgress);
+  }, [lastProgress]);
+
+  useEffect(() => {
+    if (customText) setText(customText);
+  }, [customText]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
-    if (lastProgress) setProgress(lastProgress);
-    if (customText) setText(customText);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  useEffect(() => {
-    console.log(`SDSDSDSDSDSDSd ${startTime}`);
-  }, [startTime]);
+  }, [handleKeyDown]);
 
   const textManipulations = (text: string, progress: number) => {
     const currentChar = text.slice(progress, progress + 1);
@@ -102,7 +113,7 @@ const Reading = () => {
 
     return (
       <React.Fragment>
-        <span ref={textBeforRef} className={textBefor}>
+        <span ref={textTypedRef} className={textBefor}>
           {textBefor}
         </span>
         <span
@@ -116,6 +127,7 @@ const Reading = () => {
       </React.Fragment>
     );
   };
+
   return (
     <div className="text-container">
       <p className="text">{textManipulations(text, progress)}</p>

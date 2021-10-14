@@ -1,8 +1,8 @@
-export interface errorsObject {
+export interface ErrorsObject {
   [U: string]: number;
 }
 
-export interface ObjectToPercent {
+export interface ObjectShowPercent {
   [U: string]: string;
 }
 
@@ -27,7 +27,7 @@ export interface Progres {
   isLoading: boolean;
   customText: string;
   time: number;
-  errors: errorsObject;
+  errors: ErrorsObject;
   wpm: number;
   poet: Poet;
   startTime: number;

@@ -1,4 +1,4 @@
-import { errorsObject, ObjectToPercent } from './interfaces';
+import { ErrorsObject, ObjectShowPercent } from './interfaces';
 
 export const stringFilter = (str: string) =>
   str
@@ -15,36 +15,35 @@ export const getTime = (sec: number) => {
   return timeString;
 };
 
-export const countAllMistakes = (errors: errorsObject) =>
-  Object.values(errors).reduce((prev: number, value: number) => {
+export const countAllMistakes = (errorsObject: ErrorsObject) =>
+  Object.values(errorsObject).reduce((prev: number, value: number) => {
     return prev + value;
   }, 0);
 
-const sortObject = (object: errorsObject): errorsObject => {
+const sortObject = (errorsObject: ErrorsObject): ErrorsObject => {
   const sortedArr: [U: string, U: number][] = [];
-  for (let value in object) {
-    sortedArr.push([value, object[value]]);
+  for (let value in errorsObject) {
+    sortedArr.push([value, errorsObject[value]]);
   }
   sortedArr.length = 10;
   sortedArr.sort(function (a, b) {
     return b[1] - a[1];
   });
-  const sortedObject: errorsObject = {};
+  const sortedObject: ErrorsObject = {};
   sortedArr.forEach(function (item) {
     sortedObject[item[0]] = item[1];
   });
   return sortedObject;
 };
 
-export const convertSortedToPercent = (
-  object: errorsObject,
+export const sortAndShowPercent = (
+  object: ErrorsObject,
   errorsAll: number
-): ObjectToPercent => {
-  const newObj: ObjectToPercent = {};
+): ObjectShowPercent => {
+  const newObj: ObjectShowPercent = {};
   for (let [key, value] of Object.entries(sortObject(object))) {
-    const val: any = value;
     Object.assign(newObj, {
-      [key]: Math.floor((val / errorsAll) * 100).toString() + '%',
+      [key]: Math.floor((value / errorsAll) * 100).toString() + '%',
     });
   }
   return newObj;

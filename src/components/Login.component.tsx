@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import {
 import './Login.style.scss';
 import { userAuthificationLoaded } from '../redux/user/user.selectors';
 import Spinner from './spinner.component';
+import { Dispatch } from 'redux';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -23,18 +24,20 @@ const Login: React.FC = () => {
   const refEmailInput = useRef<HTMLInputElement | null>(null);
   const refPwdInput = useRef<HTMLInputElement | null>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<Dispatch>();
   const isLoading: boolean = useSelector(userAuthificationLoaded);
 
   // *** focuses first input on component did mount
   useEffect(() => {
-    if (refEmailInput.current) refEmailInput.current.focus();
+    if (!refEmailInput.current) return;
+    refEmailInput.current.focus();
   }, []);
 
   // *** sets focus and blinking on input click event
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (!refEmailInput.current || !refPwdInput.current) return;
     if (e.target === refEmailContainer.current) {
-      if (refEmailInput.current) refEmailInput.current.focus();
+      refEmailInput.current.focus();
       setHiddenEmail(!hiddenEmail);
       setHiddenPwd(true);
     } else {
