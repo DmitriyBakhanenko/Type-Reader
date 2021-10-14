@@ -1,10 +1,9 @@
-/* eslint-disable */
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
   errorTracking,
+  progressTimeStart,
   progressTracking,
   saveProgress,
 } from '../redux/progress/progress.actions';
@@ -12,12 +11,12 @@ import {
   selectCurrentErrors,
   selectCurrentProgress,
   selectCustomText,
+  selectStartTime,
 } from '../redux/progress/progress.selectors';
 import './Reading.style.scss';
 
 const Reading = () => {
   const [progress, setProgress] = useState(0);
-  const [startTime, setStartTime] = useState(0);
   const [input, setInput] = useState('');
   const [charColor, setCharColor] = useState('black');
   const [text, setText] = useState(
@@ -31,11 +30,14 @@ const Reading = () => {
   const lastProgress = useSelector(selectCurrentProgress);
   const customText = useSelector(selectCustomText);
   const errors = useSelector(selectCurrentErrors);
+  const startTime = useSelector(selectStartTime);
 
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
   const getFinalResults = () => {
     const finalTime = (Date.now() - startTime) / 1000;
+    console.log(`startTime: ${startTime}`);
+    console.log(finalTime);
     const wordCount = textBeforRef.current?.className?.split(' ').length;
     const wpm = finalTime >= 60 ? Math.floor((wordCount * 60) / finalTime) : 0;
 
@@ -48,6 +50,7 @@ const Reading = () => {
   const handleKeyDown = (e: any) => {
     e.preventDefault();
     if (e.key === 'Escape') {
+      console.error(`ESCAPE: ${startTime}`);
       dispatch(saveProgress(getFinalResults()));
       return history.push('/');
     }
@@ -56,17 +59,13 @@ const Reading = () => {
     }
   };
 
-  const setTimer = () => {
-    if (startTime) return;
-    setStartTime(Date.now());
-  };
-
   useEffect(() => {
     if (!input) return;
     let txtChar: any = charRef.current.className;
-
-    setTimer();
-
+    if (!startTime) {
+      console.error('START TIME INSIDE IF');
+      dispatch(progressTimeStart(Date.now()));
+    }
     if (text.length === progress + 1) {
       dispatch(saveProgress(getFinalResults()));
       history.push('/');
@@ -91,6 +90,10 @@ const Reading = () => {
     if (customText) setText(customText);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    console.log(`SDSDSDSDSDSDSd ${startTime}`);
+  }, [startTime]);
 
   const textManipulations = (text: string, progress: number) => {
     const currentChar = text.slice(progress, progress + 1);

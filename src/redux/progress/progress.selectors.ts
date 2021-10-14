@@ -12,6 +12,11 @@ export const selectCurrentErrors = createSelector(
   (state) => state.errors
 );
 
+export const selectStartTime = createSelector(
+  [selectProgress],
+  (state) => state.startTime
+);
+
 export const selectCustomText = createSelector(
   [selectProgress],
   (state) => state.customText

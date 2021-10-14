@@ -13,41 +13,34 @@ import {
 import { signOutStart } from '../redux/user/user.actions';
 import { selectCurrentUser } from '../redux/user/user.selectors';
 import CustomButton from './custom-button.component';
+import {
+  convertSortedToPercent,
+  countAllMistakes,
+  getTime,
+  stringFilter,
+} from './helper.methods';
+import { errorsObject, Progres, UserObject } from './interfaces';
 import './Menu.style.scss';
 
 const Menu = () => {
   const dispatch = useDispatch();
-  const user = useSelector(selectCurrentUser);
-  const errors = useSelector(selectCurrentErrors);
-  const progress = useSelector(selectProgress);
-  const [message, setMessage] = useState(`Hello ${user.displayName}`);
+  const user: UserObject = useSelector(selectCurrentUser);
+  const errors: errorsObject = useSelector(selectCurrentErrors);
+  const progress: Progres = useSelector(selectProgress);
+  const [message, setMessage] = useState<string>('');
   const [err, setErr] = useState({});
 
-  /* eslint-disable */
-  const paste = () => {
+  const pasteFromClopboard = () => {
     dispatch(progressRefresh());
-    navigator.clipboard.readText().then((text) =>
-      dispatch(
-        customTextAddAction(
-          text
-            .replace(/[\n\r]+/g, ' ')
-            .replace(/[\…]+/g, ':')
-            .replace(/[\“\”]+/g, '"')
-            .replace(/[\’]+/g, "'")
-            .replace(/\s+/g, ' ')
-        )
-      )
-    );
+    navigator.clipboard
+      .readText()
+      .then((text) => dispatch(customTextAddAction(stringFilter(text))));
     setMessage('Your text has been loaded');
   };
 
-  /* eslint-enable */
-  const getTime = (sec: number) => {
-    const date = new Date(0);
-    date.setSeconds(sec); // specify value for SECONDS here
-    const timeString = date.toISOString().substr(11, 8);
-    return timeString;
-  };
+  useEffect(() => {
+    if (user.displayName) setMessage(`Hello ${user.displayName}`);
+  }, [user.displayName]);
 
   useEffect(() => {
     if (Object.entries(progress.poet).length)
@@ -55,32 +48,8 @@ const Menu = () => {
     if (progress.time === 0) return;
     setMessage('');
     setErr(errors);
-    const errorsAll: any = Object.values(errors).reduce(
-      (prev: any, value: any) => {
-        return prev + value;
-      },
-      0
-    );
-    const sortedArr = [];
-    for (let value in errors) {
-      sortedArr.push([value, errors[value]]);
-    }
-    sortedArr.length = 10;
-    sortedArr.sort(function (a, b) {
-      return b[1] - a[1];
-    });
-    const sortedErrors: any = {};
-    sortedArr.forEach(function (item) {
-      sortedErrors[item[0]] = item[1];
-    });
-    const newObj: any = {};
-    for (let [key, value] of Object.entries(sortedErrors)) {
-      const val: any = value;
-      Object.assign(newObj, {
-        [key]: Math.floor((val / errorsAll) * 100).toString() + '%',
-      });
-    }
-    setErr(newObj);
+    const errorsAll: number = countAllMistakes(errors);
+    setErr(convertSortedToPercent(errors, errorsAll));
   }, [errors, progress.time, progress.customText, progress.poet]);
 
   const renderStatistics = () => {
@@ -147,7 +116,9 @@ const Menu = () => {
       <Link to="/reading">
         <CustomButton>Start</CustomButton>
       </Link>
-      <CustomButton onClick={paste}>Paste From Clipboard</CustomButton>
+      <CustomButton onClick={pasteFromClopboard}>
+        Paste From Clipboard
+      </CustomButton>
       <CustomButton onClick={fetchPoem}>Random Poem</CustomButton>
       <Link to="/">
         <CustomButton disabled>Statistics</CustomButton>

@@ -9,13 +9,10 @@ export const progressRefresh = () => ({
   type: progressActionsTypes.PROGRESS_REFRESH,
 });
 
-//export const saveUserProgress = (
-//userAuth: any,
-//progress: number,
-//time: number,
-//wpm: number,
-//errors: object
-//) => {};
+export const progressTimeStart = (time: any) => ({
+  type: progressActionsTypes.PROGRESS_TIME_START,
+  payload: time,
+});
 
 export const customTextAddAction = (text: string) => ({
   type: progressActionsTypes.CUSTOM_TEXT_ADD,

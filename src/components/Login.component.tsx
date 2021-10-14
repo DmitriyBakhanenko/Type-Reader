@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,35 +10,35 @@ import './Login.style.scss';
 import { userAuthificationLoaded } from '../redux/user/user.selectors';
 import Spinner from './spinner.component';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [hiddenEmail, setHiddenEmail] = useState(true);
-  const [hiddenPwd, setHiddenPwd] = useState(true);
-  const [shifr, setShifr] = useState('');
+const Login: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [hiddenEmail, setHiddenEmail] = useState<boolean>(true);
+  const [hiddenPwd, setHiddenPwd] = useState<boolean>(true);
+  const [shifr, setShifr] = useState<string>('');
 
   const cursorEvent: any = useRef();
-  const refEmailContainer: any = useRef();
-  const refPwdContainer: any = useRef();
-  const refEmailInput: any = useRef();
-  const refPwdInput: any = useRef();
+  const refEmailContainer = useRef<HTMLDivElement | null>(null);
+  const refPwdContainer = useRef<HTMLInputElement | null>(null);
+  const refEmailInput = useRef<HTMLInputElement | null>(null);
+  const refPwdInput = useRef<HTMLInputElement | null>(null);
 
   const dispatch = useDispatch();
-  const isLoading = useSelector(userAuthificationLoaded);
+  const isLoading: boolean = useSelector(userAuthificationLoaded);
 
   // *** focuses first input on component did mount
   useEffect(() => {
-    refEmailInput.current?.focus();
+    if (refEmailInput.current) refEmailInput.current.focus();
   }, []);
 
   // *** sets focus and blinking on input click event
   const handleClick = (e: any) => {
     if (e.target === refEmailContainer.current) {
-      refEmailInput.current?.focus();
+      if (refEmailInput.current) refEmailInput.current.focus();
       setHiddenEmail(!hiddenEmail);
       setHiddenPwd(true);
     } else {
-      refPwdInput.current?.focus();
+      if (refPwdInput.current) refPwdInput.current.focus();
       setHiddenPwd(!hiddenPwd);
       setHiddenEmail(true);
     }
@@ -74,7 +74,7 @@ const Login = () => {
     };
   });
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
     if (email || password) {
       const userCredentials = { email, password };
@@ -82,7 +82,7 @@ const Login = () => {
     }
   };
 
-  const googleSignIn = (e: any) => {
+  const googleSignIn = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch(googleSignInStart());
   };
