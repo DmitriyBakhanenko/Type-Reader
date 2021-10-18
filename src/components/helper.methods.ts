@@ -20,7 +20,7 @@ export const countAllMistakes = (errorsObject: ErrorsObject) =>
     return prev + value;
   }, 0);
 
-const sortObject = (errorsObject: ErrorsObject): ErrorsObject => {
+const sortErrorsObject = (errorsObject: ErrorsObject): ErrorsObject => {
   const sortedArr: [U: string, U: number][] = [];
   for (let value in errorsObject) {
     sortedArr.push([value, errorsObject[value]]);
@@ -41,7 +41,7 @@ export const sortAndShowPercent = (
   errorsAll: number
 ): ObjectShowPercent => {
   const newObj: ObjectShowPercent = {};
-  for (let [key, value] of Object.entries(sortObject(object))) {
+  for (let [key, value] of Object.entries(sortErrorsObject(object))) {
     Object.assign(newObj, {
       [key]: Math.floor((value / errorsAll) * 100).toString() + '%',
     });

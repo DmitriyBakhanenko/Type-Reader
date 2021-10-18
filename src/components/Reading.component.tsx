@@ -1,3 +1,4 @@
+import { error, timeLog } from 'console';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -38,8 +39,11 @@ const Reading: React.FC = () => {
 
   const getFinalResults = (): { time: number; wpm: number } => {
     const finalTime = (Date.now() - startTime) / 1000;
+    const finalTime2 = (startTime - Date.now()) / 1000;
+    console.log(finalTime);
+    console.log(finalTime2);
     if (!textTypedRef.current) return { time: 0, wpm: 0 };
-    const wordCount: number = textTypedRef.current.className.split(' ').length;
+    const wordCount: number = textTypedRef.current.innerText.split(' ').length;
     const wpm: number =
       finalTime >= 60 ? Math.floor((wordCount * 60) / finalTime) : 0;
 
@@ -55,8 +59,7 @@ const Reading: React.FC = () => {
       dispatch(saveProgress(getFinalResults()));
       return history.push('/');
     }
-    if (keyFilter.includes(e.key)) return;
-    setInput(e.key);
+    if (!keyFilter.includes(e.key)) setInput(e.key);
   };
 
   const saveProgressAndExit = useRef(() => {
@@ -65,7 +68,7 @@ const Reading: React.FC = () => {
   });
 
   useEffect(() => {
-    if (text.length === progress + 1) saveProgressAndExit.current();
+    if (text.length === progress) saveProgressAndExit.current();
   }, [progress, text.length]);
 
   useEffect(() => {
@@ -79,7 +82,6 @@ const Reading: React.FC = () => {
     if (txtChar === input) {
       setCharColor('black');
       setProgress(progress + 1);
-      setInput('');
       dispatch(progressTracking(progress));
     } else {
       setCharColor('red');
@@ -91,11 +93,12 @@ const Reading: React.FC = () => {
       };
       dispatch(errorTracking(newObj));
     }
-  }, [input, progress, dispatch, errorsObject]);
+    setInput('');
+  }, [input, progress, errorsObject, dispatch]);
 
   useEffect(() => {
     if (lastProgress) setProgress(lastProgress);
-  }, [lastProgress]);
+  }, []);
 
   useEffect(() => {
     if (customText) setText(customText);
@@ -104,7 +107,7 @@ const Reading: React.FC = () => {
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
+  }, []);
 
   const textManipulations = (text: string, progress: number) => {
     const currentChar = text.slice(progress, progress + 1);
@@ -113,9 +116,7 @@ const Reading: React.FC = () => {
 
     return (
       <React.Fragment>
-        <span ref={textTypedRef} className={textBefor}>
-          {textBefor}
-        </span>
+        <span ref={textTypedRef}>{textBefor}</span>
         <span
           ref={charRef}
           className={currentChar}

@@ -23,6 +23,7 @@ export const updateFirestoreUserProgress = async (
     await userRef.update({
       progress,
       time,
+      wpm,
       errors,
     });
   } catch (error: any) {
@@ -37,7 +38,6 @@ export const createUserProfileDocument = async (
   if (!userAuth) return console.error('createUserProfileDocument: !userAuth');
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
-
   const snapShot = await userRef.get();
 
   if (!snapShot.exists) {
