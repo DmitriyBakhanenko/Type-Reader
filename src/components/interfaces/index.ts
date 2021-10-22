@@ -32,3 +32,23 @@ export interface Progres {
   poet: Poet;
   startTime: number;
 }
+
+export type TimeObj = {
+  min: number;
+  sec: number;
+  mls: number;
+};
+
+export type Time = {
+  startTime: TimeObj;
+  endTime: TimeObj;
+  result: TimeObj;
+};
+
+export interface Timer {
+  time: Time;
+  getTime: (arg0: Date) => Date;
+  startTime: () => void;
+  endTime: () => void;
+  getResult: () => Timer;
+}

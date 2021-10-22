@@ -93,7 +93,7 @@ const Menu: React.FC = () => {
           <p
             style={{ textAlign: 'center', color: 'green', marginBottom: '5px' }}
           >
-            time: {getTime(Math.floor(progress.time))}
+            time: {progress.time}
           </p>
           {Object.entries(errorsObject).length > 0 ? (
             <table>

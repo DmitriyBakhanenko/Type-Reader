@@ -1,11 +1,9 @@
-import { error, timeLog } from 'console';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
   errorTracking,
-  progressTimeStart,
   progressTracking,
   saveProgress,
 } from '../redux/progress/progress.actions';
@@ -13,12 +11,13 @@ import {
   selectCurrentErrors,
   selectCurrentProgress,
   selectCustomText,
-  selectStartTime,
 } from '../redux/progress/progress.selectors';
-import { ErrorsObject } from './interfaces';
+import { ErrorsObject, Time, TimeObj } from './interfaces';
 import './Reading.style.scss';
+import { Timer } from './Timer';
 
 const Reading: React.FC = () => {
+  const [timer, setTimer] = useState<Timer | null>(null);
   const [progress, setProgress] = useState<number>(0);
   const [input, setInput] = useState<string>('');
   const [charColor, setCharColor] = useState<string>('black');
@@ -33,19 +32,18 @@ const Reading: React.FC = () => {
   const lastProgress: number = useSelector(selectCurrentProgress);
   const customText: string = useSelector(selectCustomText);
   const errorsObject: ErrorsObject = useSelector(selectCurrentErrors);
-  const startTime: number = useSelector(selectStartTime);
 
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
-  const getFinalResults = (): { time: number; wpm: number } => {
-    const finalTime = (Date.now() - startTime) / 1000;
-    const finalTime2 = (startTime - Date.now()) / 1000;
-    console.log(finalTime);
-    console.log(finalTime2);
-    if (!textTypedRef.current) return { time: 0, wpm: 0 };
+  const getFinalResults = (): { time: TimeObj; wpm: number } => {
+    if (!timer || !textTypedRef.current)
+      return { time: { min: 0, sec: 0, mls: 0 }, wpm: 0 };
+    const finalTime = timer.getResult();
     const wordCount: number = textTypedRef.current.innerText.split(' ').length;
     const wpm: number =
-      finalTime >= 60 ? Math.floor((wordCount * 60) / finalTime) : 0;
+      finalTime.sec >= 60
+        ? Math.floor((wordCount * 60) / (finalTime.sec + finalTime.min * 60))
+        : 0;
 
     return {
       time: finalTime,
@@ -56,6 +54,7 @@ const Reading: React.FC = () => {
   const handleKeyDown = (e: any) => {
     e.preventDefault();
     if (e.key === 'Escape') {
+      if (timer) timer.stopTimer();
       dispatch(saveProgress(getFinalResults()));
       return history.push('/');
     }
@@ -63,6 +62,7 @@ const Reading: React.FC = () => {
   };
 
   const saveProgressAndExit = useRef(() => {
+    if (timer) timer.stopTimer();
     dispatch(saveProgress(getFinalResults()));
     history.push('/');
   });
@@ -71,14 +71,15 @@ const Reading: React.FC = () => {
     if (text.length === progress) saveProgressAndExit.current();
   }, [progress, text.length]);
 
-  useEffect(() => {
-    if (startTime) return;
-    dispatch(progressTimeStart(Date.now()));
-  }, [startTime, dispatch]);
+  //useEffect(() => {
+  //if (startTime) return;
+  //dispatch(progressTimeStart(Date.now()));
+  //}, [startTime, dispatch]);
 
   useEffect(() => {
     if (!input || !charRef.current) return;
     let txtChar: any = charRef.current.className;
+    if (timer && !timer.time.startTime) timer.startTimer();
     if (txtChar === input) {
       setCharColor('black');
       setProgress(progress + 1);
@@ -98,6 +99,10 @@ const Reading: React.FC = () => {
 
   useEffect(() => {
     if (lastProgress) setProgress(lastProgress);
+  }, []);
+
+  useEffect(() => {
+    if (!timer) setTimer(new Timer());
   }, []);
 
   useEffect(() => {

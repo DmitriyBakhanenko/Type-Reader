@@ -5,11 +5,10 @@ const INITIAL_STATE = {
   error: null,
   isLoading: false,
   customText: '',
-  time: 0,
+  time: { min: 0, sec: 0, mls: 0 },
   errors: {},
   wpm: 0,
   poet: {},
-  startTime: 0,
 };
 
 const progressReducer = (state = INITIAL_STATE, action: any) => {
@@ -18,11 +17,6 @@ const progressReducer = (state = INITIAL_STATE, action: any) => {
     case progressActionsTypes.WRITE_USER_PROGRESS_START:
       return {
         ...state,
-      };
-    case progressActionsTypes.PROGRESS_TIME_START:
-      return {
-        ...state,
-        startTime: action.payload,
       };
     case progressActionsTypes.FETCH_POEM_START:
       return {
