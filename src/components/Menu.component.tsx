@@ -16,13 +16,12 @@ import CustomButton from './custom-button.component';
 import {
   sortAndShowPercent,
   countAllMistakes,
-  getTime,
   stringFilter,
 } from './helper.methods';
 import {
   ErrorsObject,
   ObjectShowPercent,
-  Progres,
+  Progress,
   UserObject,
 } from './interfaces';
 import './Menu.style.scss';
@@ -31,7 +30,7 @@ const Menu: React.FC = () => {
   const dispatch = useDispatch();
   const user: UserObject = useSelector(selectCurrentUser);
   const errorsObject: ErrorsObject = useSelector(selectCurrentErrors);
-  const progress: Progres = useSelector(selectProgress);
+  const progress: Progress = useSelector(selectProgress);
   const [message, setMessage] = useState<string>('');
   const [objShowPercent, setObjShowPercent] = useState<ObjectShowPercent>({});
 
@@ -40,6 +39,7 @@ const Menu: React.FC = () => {
     navigator.clipboard
       .readText()
       .then((text) => dispatch(customTextAddAction(stringFilter(text))));
+    console.log('sdsdsdsd');
     setMessage('Your text has been loaded');
   };
 
@@ -54,7 +54,7 @@ const Menu: React.FC = () => {
   }, [progress.poet]);
 
   useEffect(() => {
-    if (progress.time === 0) return;
+    if (!progress.time.mls) return;
     setMessage('');
     const countedErrors: number = countAllMistakes(errorsObject);
     setObjShowPercent(sortAndShowPercent(errorsObject, countedErrors));
@@ -81,7 +81,7 @@ const Menu: React.FC = () => {
 
   return (
     <div className="menu-container">
-      {progress.time ? (
+      {progress.time.mls ? (
         <div className="stats-container">
           {progress.wpm ? (
             <p
@@ -93,7 +93,8 @@ const Menu: React.FC = () => {
           <p
             style={{ textAlign: 'center', color: 'green', marginBottom: '5px' }}
           >
-            time: {progress.time}
+            Time {progress.time.min} min : {progress.time.sec} sec :{' '}
+            {progress.time.mls} mls
           </p>
           {Object.entries(errorsObject).length > 0 ? (
             <table>

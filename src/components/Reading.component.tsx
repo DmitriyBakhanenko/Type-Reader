@@ -12,12 +12,13 @@ import {
   selectCurrentProgress,
   selectCustomText,
 } from '../redux/progress/progress.selectors';
-import { ErrorsObject, Time, TimeObj } from './interfaces';
+import { ErrorsObject, TimeObj, TimerInt } from './interfaces';
 import './Reading.style.scss';
 import { Timer } from './Timer';
 
 const Reading: React.FC = () => {
-  const [timer, setTimer] = useState<Timer | null>(null);
+  //const [timer, setTimer] = useState<TimerInt | null>(null);
+  const [timer, setTimer] = useState<TimerInt>(new Timer());
   const [progress, setProgress] = useState<number>(0);
   const [input, setInput] = useState<string>('');
   const [charColor, setCharColor] = useState<string>('black');
@@ -26,7 +27,6 @@ const Reading: React.FC = () => {
   );
   const history = useHistory<History>();
   const dispatch = useDispatch<Dispatch>();
-
   const charRef = useRef<HTMLSpanElement | null>(null);
   const textTypedRef = useRef<HTMLParagraphElement | null>(null);
   const lastProgress: number = useSelector(selectCurrentProgress);
@@ -36,6 +36,7 @@ const Reading: React.FC = () => {
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
   const getFinalResults = (): { time: TimeObj; wpm: number } => {
+    if (timer) console.log(timer);
     if (!timer || !textTypedRef.current)
       return { time: { min: 0, sec: 0, mls: 0 }, wpm: 0 };
     const finalTime = timer.getResult();
@@ -71,15 +72,12 @@ const Reading: React.FC = () => {
     if (text.length === progress) saveProgressAndExit.current();
   }, [progress, text.length]);
 
-  //useEffect(() => {
-  //if (startTime) return;
-  //dispatch(progressTimeStart(Date.now()));
-  //}, [startTime, dispatch]);
-
   useEffect(() => {
     if (!input || !charRef.current) return;
     let txtChar: any = charRef.current.className;
-    if (timer && !timer.time.startTime) timer.startTimer();
+    if (timer && !timer.time.startTime.mls) {
+      timer.startTimer();
+    }
     if (txtChar === input) {
       setCharColor('black');
       setProgress(progress + 1);
@@ -101,9 +99,13 @@ const Reading: React.FC = () => {
     if (lastProgress) setProgress(lastProgress);
   }, []);
 
-  useEffect(() => {
-    if (!timer) setTimer(new Timer());
-  }, []);
+  //useEffect(() => {
+  //if (timer) return;
+  //const currentTimer = new Timer();
+  //console.log(currentTimer);
+  //setTimer(currentTimer);
+  //console.log('timer is' + timer);
+  //}, []);
 
   useEffect(() => {
     if (customText) setText(customText);

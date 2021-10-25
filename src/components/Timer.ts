@@ -1,7 +1,7 @@
 import { Time } from './interfaces';
 
 export class Timer {
-  time = {
+  time: Time = {
     startTime: { min: 0, sec: 0, mls: 0 },
     endTime: { min: 0, sec: 0, mls: 0 },
     result: { min: 0, sec: 0, mls: 0 },

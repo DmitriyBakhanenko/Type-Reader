@@ -21,12 +21,12 @@ export interface User {
   isLoading: boolean;
 }
 
-export interface Progres {
+export interface Progress {
   progress: number;
   error: null | string;
   isLoading: boolean;
   customText: string;
-  time: number;
+  time: { mls: number; sec: number; min: number };
   errors: ErrorsObject;
   wpm: number;
   poet: Poet;
@@ -45,10 +45,10 @@ export type Time = {
   result: TimeObj;
 };
 
-export interface Timer {
+export interface TimerInt {
   time: Time;
-  getTime: (arg0: Date) => Date;
-  startTime: () => void;
-  endTime: () => void;
-  getResult: () => Timer;
+  getTime: (arg0: Date) => TimeObj;
+  startTimer: () => void;
+  stopTimer: () => void;
+  getResult: () => TimeObj;
 }
