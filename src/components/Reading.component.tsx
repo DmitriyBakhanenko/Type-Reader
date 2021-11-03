@@ -12,13 +12,12 @@ import {
   selectCurrentProgress,
   selectCustomText,
 } from '../redux/progress/progress.selectors';
-import { ErrorsObject, TimeObj, TimerInt } from './interfaces';
+import { ErrorsObject, TimeObj, TimerInterface } from './interfaces';
 import './Reading.style.scss';
 import { Timer } from './Timer';
 
 const Reading: React.FC = () => {
-  //const [timer, setTimer] = useState<TimerInt | null>(null);
-  const [timer, setTimer] = useState<TimerInt>(new Timer());
+  const [timer, setTimer] = useState<TimerInterface>(new Timer());
   const [progress, setProgress] = useState<number>(0);
   const [input, setInput] = useState<string>('');
   const [charColor, setCharColor] = useState<string>('black');
@@ -35,20 +34,20 @@ const Reading: React.FC = () => {
 
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
-  const getFinalResults = (): { time: TimeObj; wpm: number } => {
+  const getFinalResults = (): { time: string; wpm: number } => {
     if (timer) console.log(timer);
-    if (!timer || !textTypedRef.current)
-      return { time: { min: 0, sec: 0, mls: 0 }, wpm: 0 };
-    const finalTime = timer.getResult();
+    if (!timer || !textTypedRef.current) return { time: '', wpm: 0 };
+    timer.resultTimer();
     const wordCount: number = textTypedRef.current.innerText.split(' ').length;
+    const finalTime = timer.time.forWPM;
     const wpm: number =
       finalTime.sec >= 60
         ? Math.floor((wordCount * 60) / (finalTime.sec + finalTime.min * 60))
         : 0;
 
     return {
-      time: finalTime,
-      wpm: wpm,
+      time: timer.time.result,
+      wpm,
     };
   };
 

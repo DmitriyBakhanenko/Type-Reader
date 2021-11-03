@@ -54,7 +54,7 @@ const Menu: React.FC = () => {
   }, [progress.poet]);
 
   useEffect(() => {
-    if (!progress.time.mls) return;
+    if (!progress.time) return;
     setMessage('');
     const countedErrors: number = countAllMistakes(errorsObject);
     setObjShowPercent(sortAndShowPercent(errorsObject, countedErrors));
@@ -81,7 +81,7 @@ const Menu: React.FC = () => {
 
   return (
     <div className="menu-container">
-      {progress.time.mls ? (
+      {progress.time ? (
         <div className="stats-container">
           {progress.wpm ? (
             <p
@@ -93,8 +93,7 @@ const Menu: React.FC = () => {
           <p
             style={{ textAlign: 'center', color: 'green', marginBottom: '5px' }}
           >
-            Time {progress.time.min} min : {progress.time.sec} sec :{' '}
-            {progress.time.mls} mls
+            Time {progress.time}
           </p>
           {Object.entries(errorsObject).length > 0 ? (
             <table>

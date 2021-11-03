@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   error: null,
   isLoading: false,
   customText: '',
-  time: { min: 0, sec: 0, mls: 0 },
+  time: '',
   errors: {},
   wpm: 0,
   poet: {},
@@ -49,7 +49,7 @@ const progressReducer = (state = INITIAL_STATE, action: any) => {
         ...state,
         progress: 0,
         errors: {},
-        time: 0,
+        time: '',
         wpm: 0,
       };
     case progressActionsTypes.CUSTOM_TEXT_ADD:

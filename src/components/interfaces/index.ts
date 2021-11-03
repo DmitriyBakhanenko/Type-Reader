@@ -42,13 +42,14 @@ export type TimeObj = {
 export type Time = {
   startTime: TimeObj;
   endTime: TimeObj;
-  result: TimeObj;
+  result: string;
+  forWPM: TimeObj;
 };
 
-export interface TimerInt {
+export interface TimerInterface {
   time: Time;
   getTime: (arg0: Date) => TimeObj;
   startTimer: () => void;
   stopTimer: () => void;
-  getResult: () => TimeObj;
+  resultTimer: () => void;
 }
