@@ -12,7 +12,7 @@ import {
   selectCurrentProgress,
   selectCustomText,
 } from '../redux/progress/progress.selectors';
-import { ErrorsObject, TimeObj, TimerInterface } from './interfaces';
+import { ErrorsObject, TimerInterface } from './interfaces';
 import './Reading.style.scss';
 import { Timer } from './Timer';
 
@@ -41,7 +41,7 @@ const Reading: React.FC = () => {
     const wordCount: number = textTypedRef.current.innerText.split(' ').length;
     const finalTime = timer.time.forWPM;
     const wpm: number =
-      finalTime.sec >= 60
+      finalTime.sec !== 0 || finalTime.min !== 0
         ? Math.floor((wordCount * 60) / (finalTime.sec + finalTime.min * 60))
         : 0;
 

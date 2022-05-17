@@ -3,9 +3,10 @@ import { ErrorsObject, ObjectShowPercent } from './interfaces';
 export const stringFilter = (str: string) =>
   str
     .replace(/[\n\r]+/g, ' ')
-    .replace(/[\…]+/g, ':')
+    .replace(/[\…]+/g, '...')
     .replace(/[\“\”]+/g, '"')
-    .replace(/[\’]+/g, "'");
+    .replace(/[\’]+/g, "'")
+    .replace(/[\—]+/g, '-');
 //.replace(/\s+/g, ' ');
 
 export const getTime = (sec: number) => {
