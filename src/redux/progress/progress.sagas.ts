@@ -1,43 +1,36 @@
 import axios from 'axios';
 import { takeLatest, call, put, all } from 'redux-saga/effects';
-import { fetchPoem, fetchPoemError, fetchPoemFinish } from './progress.actions';
+import { fetchRandomFact, fetchRandomFactError, fetchRandomFactFinish } from './progress.actions';
 import progressActionsTypes from './progress.types';
+import { stringFilter } from '../../components/helper.methods'
 
 const takeLatest_any: any = takeLatest;
 
-export function* fetchPoemStart() {
+export function* fetchRandomFactStart() {
   try {
     const response: { data: any } = yield axios.get(
-      'https://www.poemist.com/api/v1/randompoems'
+      "https://catfact.ninja/fact"
     );
-    const random = Math.floor(Math.random() * 6);
 
-    /* eslint-disable */
-    const text = response.data[random].content
-      .replace(/[\n\r]+/g, ' ')
-      .replace(/[\…]+/g, ':')
-      .replace(/[\“\”]+/g, '"')
-      .replace(/[\’]+/g, "'")
-      .replace(/\s+/g, ' ');
-    /* eslint-enable */
+    const text = stringFilter(response.data.fact)
     yield put(
-      fetchPoem({
+      fetchRandomFact({
         text,
-        title: response.data[random].title,
-        author: response.data[random].poet.name,
+        title: 'Random Facts About Cats',
+        author: 'na',
       })
     );
   } catch (error: any) {
-    yield put(fetchPoemError());
+    yield put(fetchRandomFactError());
     console.error(error.message);
   }
-  yield put(fetchPoemFinish());
+  yield put(fetchRandomFactFinish());
 }
 
-export function* onFetchPoemStart() {
-  yield takeLatest_any(progressActionsTypes.FETCH_POEM_START, fetchPoemStart);
+export function* onFetchRandomFactStart() {
+  yield takeLatest_any(progressActionsTypes.FETCH_RANDOM_FACT_START, fetchRandomFactStart);
 }
 
 export function* progressSagas() {
-  yield all([call(onFetchPoemStart)]);
+  yield all([call(onFetchRandomFactStart)]);
 }

@@ -8,7 +8,7 @@ import {
 } from '../redux/user/user.actions';
 import './Login.style.scss';
 import { userAuthificationLoaded } from '../redux/user/user.selectors';
-import Spinner from './spinner.component';
+import Spinner from '../components/spinner.component';
 import { Dispatch } from 'redux';
 
 const Login: React.FC = () => {

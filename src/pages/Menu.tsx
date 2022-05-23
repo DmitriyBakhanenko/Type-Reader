@@ -1,9 +1,10 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
   customTextAddAction,
-  fetchPoemStart,
+  fetchRandomFactStart,
   progressRefresh,
 } from '../redux/progress/progress.actions';
 import {
@@ -12,18 +13,18 @@ import {
 } from '../redux/progress/progress.selectors';
 import { signOutStart } from '../redux/user/user.actions';
 import { selectCurrentUser } from '../redux/user/user.selectors';
-import CustomButton from './custom-button.component';
+import CustomButton from '../components/custom-button.component';
 import {
   sortAndShowPercent,
   countAllMistakes,
   stringFilter,
-} from './helper.methods';
+} from '../components/helper.methods';
 import {
   ErrorsObject,
   ObjectShowPercent,
   Progress,
   UserObject,
-} from './interfaces';
+} from '../components/interfaces';
 import './Menu.style.scss';
 
 const Menu: React.FC = () => {
@@ -33,13 +34,13 @@ const Menu: React.FC = () => {
   const progress: Progress = useSelector(selectProgress);
   const [message, setMessage] = useState<string>('');
   const [objShowPercent, setObjShowPercent] = useState<ObjectShowPercent>({});
+  const history = useHistory()
 
   const pasteFromClopboard = () => {
     dispatch(progressRefresh());
     navigator.clipboard
       .readText()
       .then((text) => dispatch(customTextAddAction(stringFilter(text))));
-    console.log('sdsdsdsd');
     setMessage('Your text has been loaded');
   };
 
@@ -75,8 +76,9 @@ const Menu: React.FC = () => {
 
   const fetchPoem = () => {
     dispatch(progressRefresh());
-    dispatch(fetchPoemStart());
+    dispatch(fetchRandomFactStart());
     setMessage('random poem loaded');
+    history.push('/reading');
   };
 
   return (
@@ -126,7 +128,7 @@ const Menu: React.FC = () => {
       <CustomButton onClick={pasteFromClopboard}>
         Paste From Clipboard
       </CustomButton>
-      <CustomButton onClick={fetchPoem}>Random Poem</CustomButton>
+      <CustomButton onClick={fetchPoem}>Random Cat Facts</CustomButton>
       <Link to="/">
         <CustomButton disabled>Statistics</CustomButton>
       </Link>

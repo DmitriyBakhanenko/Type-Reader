@@ -1,13 +1,13 @@
 import { Switch, Route } from 'react-router-dom';
-import Login from './components/Login.component';
+import Login from './pages/Login';
 import Create from './components/Create.component';
 import './App.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import { checkUserSession } from './redux/user/user.actions';
 import React, { useEffect, useRef } from 'react';
-import Menu from './components/Menu.component';
-import Reading from './components/Reading.component';
+import Menu from './pages/Menu';
+import Reading from './pages/Reading';
 import Spinner from './components/spinner.component';
 import { selectIsLoading } from './redux/progress/progress.selectors';
 

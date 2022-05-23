@@ -24,19 +24,19 @@ export const errorTracking = (error: object) => ({
   payload: error,
 });
 
-export const fetchPoemStart = () => ({
-  type: progressActionsTypes.FETCH_POEM_START,
+export const fetchRandomFactStart = () => ({
+  type: progressActionsTypes.FETCH_RANDOM_FACT_START,
 });
 
-export const fetchPoemFinish = () => ({
-  type: progressActionsTypes.FETCH_POEM_FINISH,
+export const fetchRandomFactFinish = () => ({
+  type: progressActionsTypes.FETCH_RANDOM_FACT_FINISH,
 });
 
-export const fetchPoemError = () => ({
-  type: progressActionsTypes.FETCH_POEM_ERROR,
+export const fetchRandomFactError = () => ({
+  type: progressActionsTypes.FETCH_RANDOM_FACT_ERROR,
 });
 
-export const fetchPoem = (data: object) => ({
-  type: progressActionsTypes.FETCH_POEM,
+export const fetchRandomFact = (data: object) => ({
+  type: progressActionsTypes.FETCH_RANDOM_FACT,
   payload: data,
 });

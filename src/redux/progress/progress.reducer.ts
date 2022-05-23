@@ -18,17 +18,17 @@ const progressReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
       };
-    case progressActionsTypes.FETCH_POEM_START:
+    case progressActionsTypes.FETCH_RANDOM_FACT_START:
       return {
         ...state,
         isLoading: true,
       };
-    case progressActionsTypes.FETCH_POEM_FINISH:
+    case progressActionsTypes.FETCH_RANDOM_FACT_FINISH:
       return {
         ...state,
         isLoading: false,
       };
-    case progressActionsTypes.FETCH_POEM:
+    case progressActionsTypes.FETCH_RANDOM_FACT:
       return {
         ...state,
         customText: action.payload.text,

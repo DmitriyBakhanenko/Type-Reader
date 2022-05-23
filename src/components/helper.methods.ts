@@ -8,6 +8,9 @@ export const stringFilter = (str: string) =>
     .replace(/[\’]+/g, "'")
     .replace(/[\—]+/g, '-');
 //.replace(/\s+/g, ' ');
+//
+
+export const defaultText = "Test: As with many techniques in JavaScript, it's mainly a matter of taste when deciding which one to use."
 
 export const getTime = (sec: number) => {
   const date = new Date(0);
@@ -27,11 +30,11 @@ const sortErrorsObject = (errorsObject: ErrorsObject): ErrorsObject => {
     sortedArr.push([value, errorsObject[value]]);
   }
   sortedArr.length = 10;
-  sortedArr.sort(function (a, b) {
+  sortedArr.sort(function(a, b) {
     return b[1] - a[1];
   });
   const sortedObject: ErrorsObject = {};
-  sortedArr.forEach(function (item) {
+  sortedArr.forEach(function(item) {
     sortedObject[item[0]] = item[1];
   });
   return sortedObject;

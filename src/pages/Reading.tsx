@@ -6,24 +6,25 @@ import {
   errorTracking,
   progressTracking,
   saveProgress,
+  progressRefresh,
+  fetchRandomFactStart
 } from '../redux/progress/progress.actions';
 import {
   selectCurrentErrors,
   selectCurrentProgress,
   selectCustomText,
 } from '../redux/progress/progress.selectors';
-import { ErrorsObject, TimerInterface } from './interfaces';
+import { defaultText } from '../components/helper.methods';
+import { ErrorsObject, TimerInterface } from '../components/interfaces';
 import './Reading.style.scss';
-import { Timer } from './Timer';
+import { Timer } from '../components/Timer';
 
 const Reading: React.FC = () => {
-  const [timer, setTimer] = useState<TimerInterface>(new Timer());
+  const [timer] = useState<TimerInterface>(new Timer());
   const [progress, setProgress] = useState<number>(0);
   const [input, setInput] = useState<string>('');
   const [charColor, setCharColor] = useState<string>('black');
-  const [text, setText] = useState<string>(
-    "Test: As with many techniques in JavaScript, it's mainly a matter of taste when deciding which one to use."
-  );
+  const [text, setText] = useState<string>(defaultText);
   const history = useHistory<History>();
   const dispatch = useDispatch<Dispatch>();
   const charRef = useRef<HTMLSpanElement | null>(null);
@@ -61,14 +62,12 @@ const Reading: React.FC = () => {
     if (!keyFilter.includes(e.key)) setInput(e.key);
   };
 
-  const saveProgressAndExit = useRef(() => {
-    if (timer) timer.stopTimer();
-    dispatch(saveProgress(getFinalResults()));
-    history.push('/');
-  });
-
+  // Fetch next random page
   useEffect(() => {
-    if (text.length === progress) saveProgressAndExit.current();
+    if (text.length !== progress) return
+    dispatch(fetchRandomFactStart());
+    setProgress(0)
+    dispatch(progressRefresh())
   }, [progress, text.length]);
 
   useEffect(() => {
@@ -97,14 +96,6 @@ const Reading: React.FC = () => {
   useEffect(() => {
     if (lastProgress) setProgress(lastProgress);
   }, []);
-
-  //useEffect(() => {
-  //if (timer) return;
-  //const currentTimer = new Timer();
-  //console.log(currentTimer);
-  //setTimer(currentTimer);
-  //console.log('timer is' + timer);
-  //}, []);
 
   useEffect(() => {
     if (customText) setText(customText);
