@@ -36,7 +36,6 @@ const Reading: React.FC = () => {
   const keyFilter = ['Alt', 'Control', 'Shift', 'Tab', 'Meta', 'CapsLock'];
 
   const getFinalResults = (): { time: string; wpm: number } => {
-    if (timer) console.log(timer);
     if (!timer || !textTypedRef.current) return { time: '', wpm: 0 };
     timer.resultTimer();
     const wordCount: number = textTypedRef.current.innerText.split(' ').length;
@@ -45,7 +44,6 @@ const Reading: React.FC = () => {
       finalTime.sec !== 0 || finalTime.min !== 0
         ? Math.floor((wordCount * 60) / (finalTime.sec + finalTime.min * 60))
         : 0;
-
     return {
       time: timer.time.result,
       wpm,

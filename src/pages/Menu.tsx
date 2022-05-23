@@ -1,140 +1,29 @@
-import { ReactElement, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  customTextAddAction,
-  fetchRandomFactStart,
-  progressRefresh,
-} from '../redux/progress/progress.actions';
-import {
-  selectCurrentErrors,
-  selectProgress,
-} from '../redux/progress/progress.selectors';
 import { signOutStart } from '../redux/user/user.actions';
-import { selectCurrentUser } from '../redux/user/user.selectors';
 import CustomButton from '../components/custom-button.component';
-import {
-  sortAndShowPercent,
-  countAllMistakes,
-  stringFilter,
-} from '../components/helper.methods';
-import {
-  ErrorsObject,
-  ObjectShowPercent,
-  Progress,
-  UserObject,
-} from '../components/interfaces';
 import './Menu.style.scss';
+import MenuProgress from '../components/MenuComponents/MenuProgress';
+import { fetchRandomFacts, pasteFromClipboard } from '../components/MenuComponents/MenuService'
 
 const Menu: React.FC = () => {
   const dispatch = useDispatch();
-  const user: UserObject = useSelector(selectCurrentUser);
-  const errorsObject: ErrorsObject = useSelector(selectCurrentErrors);
-  const progress: Progress = useSelector(selectProgress);
-  const [message, setMessage] = useState<string>('');
-  const [objShowPercent, setObjShowPercent] = useState<ObjectShowPercent>({});
-  const history = useHistory()
-
-  const pasteFromClopboard = () => {
-    dispatch(progressRefresh());
-    navigator.clipboard
-      .readText()
-      .then((text) => dispatch(customTextAddAction(stringFilter(text))));
-    setMessage('Your text has been loaded');
-  };
-
-  useEffect(() => {
-    if (!user.displayName) return;
-    setMessage(`Hello ${user.displayName}`);
-  }, [user.displayName]);
-
-  useEffect(() => {
-    if (!Object.entries(progress.poet).length) return;
-    setMessage(`${progress.poet.name} - "${progress.poet.title}"`);
-  }, [progress.poet]);
-
-  useEffect(() => {
-    if (!progress.time) return;
-    setMessage('');
-    const countedErrors: number = countAllMistakes(errorsObject);
-    setObjShowPercent(sortAndShowPercent(errorsObject, countedErrors));
-  }, [errorsObject, progress.time]);
-
-  const renderStatistics = () => {
-    const renderArr: ReactElement<HTMLTableRowElement>[] = [];
-    for (let [key, value] of Object.entries(objShowPercent)) {
-      renderArr.push(
-        <tr key={key}>
-          <td className="">{key}</td>
-          <td className="">{value}</td>
-        </tr>
-      );
-    }
-    return renderArr;
-  };
-
-  const fetchPoem = () => {
-    dispatch(progressRefresh());
-    dispatch(fetchRandomFactStart());
-    setMessage('random poem loaded');
-    history.push('/reading');
-  };
 
   return (
     <div className="menu-container">
-      {progress.time ? (
-        <div className="stats-container">
-          {progress.wpm ? (
-            <p
-              style={{ textAlign: 'center', color: 'red', marginBottom: '5px' }}
-            >
-              Words per minute: {progress.wpm}
-            </p>
-          ) : null}
-          <p
-            style={{ textAlign: 'center', color: 'green', marginBottom: '5px' }}
-          >
-            Time {progress.time}
-          </p>
-          {Object.entries(errorsObject).length > 0 ? (
-            <table>
-              <tbody>
-                <tr>
-                  <th>Button</th>
-                  <th>Mistakes</th>
-                </tr>
-                {renderStatistics()}
-              </tbody>
-            </table>
-          ) : (
-            <p
-              style={{
-                marginBottom: '5px',
-                color: 'white',
-                opacity: 0.7,
-                textAlign: 'center',
-              }}
-            >
-              No mistakes
-            </p>
-          )}
-        </div>
-      ) : null}
-      {message ? <p className="welcome-message">{message}</p> : null}
+      <MenuProgress />
       <Link to="/reading">
-        <CustomButton>Start</CustomButton>
+        <CustomButton
+          onClick={() => fetchRandomFacts(dispatch)}>Random Cat Facts
+        </CustomButton>
+        <CustomButton
+          onClick={() => pasteFromClipboard(dispatch)}>Paste Text From Clipboard
+        </CustomButton>
       </Link>
-      <CustomButton onClick={pasteFromClopboard}>
-        Paste From Clipboard
-      </CustomButton>
-      <CustomButton onClick={fetchPoem}>Random Cat Facts</CustomButton>
       <Link to="/">
         <CustomButton disabled>Statistics</CustomButton>
       </Link>
-      <CustomButton onClick={() => dispatch(signOutStart())}>
-        Log Off
-      </CustomButton>
+      <CustomButton onClick={() => dispatch(signOutStart())}>Log Off</CustomButton>
     </div>
   );
 };
