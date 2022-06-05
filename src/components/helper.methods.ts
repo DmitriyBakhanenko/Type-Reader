@@ -3,11 +3,11 @@ import { ErrorsObject, ObjectShowPercent } from './interfaces';
 export const stringFilter = (str: string) =>
   str
     .replace(/[\n\r]+/g, ' ')
-    .replace(/[\…]+/g, '...')
-    .replace(/[\“\”]+/g, '"')
-    .replace(/[\’]+/g, "'")
-    .replace(/[\—]+/g, '-');
-//.replace(/\s+/g, ' ');
+    .replace(/[…]+/g, '...')
+    .replace(/[“”]+/g, '"')
+    .replace(/[’]+/g, "'")
+    .replace(/[—]+/g, '-')
+    .replace(/\s+/g, ' ');
 //
 
 export const defaultText = "Test: As with many techniques in JavaScript, it's mainly a matter of taste when deciding which one to use."

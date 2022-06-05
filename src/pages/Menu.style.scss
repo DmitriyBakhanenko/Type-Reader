@@ -8,37 +8,17 @@
     //background: yellow;
   }
 
-  table {
-    margin-bottom: 10px;
-    color: white;
-    width: 100%;
-
-    tr {
-      &:nth-child(even) {
-        background: #222;
-      }
-      &:nth-child(odd) {
-        background: #000;
-      }
-      td {
-        text-align: center;
-      }
-    }
-  }
-
   a {
     text-decoration: none;
   }
 
   .welcome-message {
-    margin-bottom: 50px;
-    color: #fff;
+    color: #191;
     opacity: 0.8;
     font-size: 2rem;
     text-align: center;
 
     &:after {
-      //content: '';
       display: inline-block;
       width: 100%;
     }
